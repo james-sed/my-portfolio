@@ -339,6 +339,7 @@
 .submit-btn:active{
   transition: 0.1s;
   background-color: #FFFFFF;
+  
 }
 
 .form-container {
@@ -346,3 +347,35 @@
   margin: 2rem auto;
   text-align: center;
 }
+
+.socials-container, 
+.socials{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+.socials a{
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.socials a:hover{
+  text-decoration: underline;
+  font-weight: bolder;
+  color: #008554;
+  transition: 0.2s;
+  font-style: italic;
+}
+
+.form-sub-confirm{
+  font-family: 'Courier New', Courier, monospace;
+  color: #FFFFFF;
+  font-weight: bolder;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+}
+
