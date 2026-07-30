@@ -278,7 +278,12 @@
   font-weight: 600;
   padding: 0.4rem 0.9rem;
   border-radius: 20px;
-  
+}
+
+.skills-list li:hover{
+  transition: 0.8s;
+  background-color: #FFFFFF;
+  color: black;
 }
 
 .headers-about{
@@ -287,4 +292,57 @@
   font-family: 'Courier New', monospace;
   color: #13a0c4;
   font-style: italic;
+}
+
+.userName-box, 
+.userEmail-box, 
+.userMessage-box, 
+.submit-btn{
+  padding: 10px;
+  border-radius: 20px;
+  border-style: none;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.719);
+  margin: 0 auto;
+  box-sizing: border-box;
+  width: 50%;
+}
+
+.userMessage-box{
+  border-radius: 10px;
+  padding-right: 10px;
+}
+
+.input-boxes{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: linear-gradient(180deg, #14AAC4 0%, #099C7A 49%, #0080AB 100%);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 30px;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.submit-btn{
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.submit-btn:hover{
+  background-color: #008554;
+  transition: 0.5s;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.submit-btn:active{
+  transition: 0.1s;
+  background-color: #FFFFFF;
+}
+
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: center;
 }
