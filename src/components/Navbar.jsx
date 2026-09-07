@@ -1,9 +1,11 @@
 import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiSun, HiMoon } from "react-icons/hi";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -11,13 +13,14 @@ export default function Navbar() {
     <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="navbar-wordmark" onClick={closeMenu}>
-          Sederia
+          James
         </Link>
 
         <button
-          className={`navbar-toggle ${menuOpen ? "is-open" : ""}`}
+          className="navbar-toggle"
           onClick={() => setMenuOpen((o) => !o)}
           aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <HiX size={24} /> : <HiMenu size={24} />}
         </button>
@@ -35,6 +38,22 @@ export default function Navbar() {
           <NavLink to="/contact" onClick={closeMenu}>
             Contact
           </NavLink>
+
+          <button
+            className="theme-toggle"
+            onClick={() => {
+              toggleTheme();
+              closeMenu();
+            }}
+            aria-label={
+              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+            }
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <span className="theme-toggle-icon">
+              {theme === "dark" ? <HiSun size={20} /> : <HiMoon size={20} />}
+            </span>
+          </button>
         </nav>
       </div>
     </header>
