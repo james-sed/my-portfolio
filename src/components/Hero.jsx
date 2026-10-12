@@ -6,8 +6,7 @@ import { SiCss, SiJavascript, SiReact } from "react-icons/si";
 // Phrases cycled through the hero's typing effect.
 const ROLES = [
   "Front-end Developer",
-  "React Developer",
-  "UI Engineer",
+  "Web Developer",
   "AWS Student Builder",
 ];
 
@@ -16,7 +15,7 @@ const LINKS = {
   github: "https://github.com/james-sed",
   linkedin: "https://www.linkedin.com/in/james-sederia-4b87383a8",
   email: "jjsederia08@gmail.com",
-  resume: "/resume.pdf", // TODO: drop resume.pdf into /public
+  resume: "/resume-sederia.pdf",
 };
 
 /** Small typewriter hook honouring prefers-reduced-motion. */

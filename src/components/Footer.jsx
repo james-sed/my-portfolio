@@ -66,8 +66,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <small>
-            © {year} James Sederia. Built with React, vanilla CSS & a lot of
-            coffee.
+            © {year} James Sederia. All Rights Reserved.
           </small>
           <a className="btn btn--ghost" href="#home">
             Back to top <HiOutlineArrowUp aria-hidden="true" />

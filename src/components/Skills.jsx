@@ -1,6 +1,7 @@
 import { FaJava } from "react-icons/fa";
 import {
   SiCss,
+  SiFigma,
   SiGit,
   SiGithub,
   SiHtml5,
@@ -26,6 +27,7 @@ const SKILLS = [
   { label: "Vite", Icon: SiVite, color: "#a78bfa" },
   { label: "Git", Icon: SiGit, color: "#f05032" },
   { label: "GitHub", Icon: SiGithub, color: undefined },
+  { label: "Figma", Icon: SiFigma, color: "#a259ff" },
   { label: "MySQL", Icon: SiMysql, color: "#4479a1" },
   { label: "PHP", Icon: SiPhp, color: "#777bb4" },
   { label: "Python", Icon: SiPython, color: "#3776ab" },
