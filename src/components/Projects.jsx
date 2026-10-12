@@ -10,7 +10,7 @@ const PROJECTS = [
     description:
       "The official site for our AWS Student Builders group — event listings, team profiles, and quick registration for upcoming workshops.",
     image: "/aws home.jpg",
-    tags: ["React", "CSS", "Vite"],
+    tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: "https://www.awssbgjru.me/",
     repo: "https://github.com/james-sed",
   },
@@ -19,7 +19,7 @@ const PROJECTS = [
     description:
       "A fast, mobile-friendly sign-up flow with validation, confirmation states, and a clean admin-style dashboard for organizers.",
     image: "/projects/events.svg",
-    tags: ["React", "JavaScript", "API"],
+    tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: "#", // TODO: live URL
     repo: "https://github.com/james-sed",
   },
