@@ -55,10 +55,10 @@ export default function About() {
       <div className="container about-grid">
         <Reveal className="about-portrait">
           <img
-            src="/about.svg"
-            alt="Illustration of a developer working on a clean interface"
-            width="600"
-            height="600"
+            src="/professional-pic-james.jpg"
+            alt="Portrait of James Sederia"
+            width="713"
+            height="871"
             loading="lazy"
             decoding="async"
           />

@@ -23,7 +23,7 @@ const SOCIALS = [
   },
   {
     id: "email",
-    href: "mailto:hello@jamessederia.dev", // TODO: replace
+    href: "mailto:jjsederia08@gmail.com", // TODO: replace
     Icon: FaEnvelope,
     label: "Email",
   },

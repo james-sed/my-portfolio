@@ -15,7 +15,7 @@ const LINKS = {
   // TODO: replace with your real details
   github: "https://github.com/james-sed",
   linkedin: "https://www.linkedin.com/in/james-sederia-4b87383a8",
-  email: "hello@jamessederia.dev",
+  email: "jjsederia08@gmail.com",
   resume: "/resume.pdf", // TODO: drop resume.pdf into /public
 };
 

@@ -9,9 +9,9 @@ const PROJECTS = [
     title: "AWS SBG JRU Website",
     description:
       "The official site for our AWS Student Builders group — event listings, team profiles, and quick registration for upcoming workshops.",
-    image: "/projects/awssbg.svg",
+    image: "/aws home.jpg",
     tags: ["React", "CSS", "Vite"],
-    live: "#", // TODO: live URL
+    live: "https://www.awssbgjru.me/",
     repo: "https://github.com/james-sed",
   },
   {
@@ -20,15 +20,6 @@ const PROJECTS = [
       "A fast, mobile-friendly sign-up flow with validation, confirmation states, and a clean admin-style dashboard for organizers.",
     image: "/projects/events.svg",
     tags: ["React", "JavaScript", "API"],
-    live: "#", // TODO: live URL
-    repo: "https://github.com/james-sed",
-  },
-  {
-    title: "DevTools Showcase",
-    description:
-      "A curated collection of reusable UI components and front-end patterns — buttons, toggles, cards, and form controls, all themeable.",
-    image: "/projects/devtools.svg",
-    tags: ["HTML", "CSS", "React"],
     live: "#", // TODO: live URL
     repo: "https://github.com/james-sed",
   },

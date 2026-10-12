@@ -7,6 +7,7 @@ import {
   SiJavascript,
   SiMysql,
   SiNodedotjs,
+  SiPhp,
   SiPython,
   SiReact,
   SiTailwindcss,
@@ -26,6 +27,7 @@ const SKILLS = [
   { label: "Git", Icon: SiGit, color: "#f05032" },
   { label: "GitHub", Icon: SiGithub, color: undefined },
   { label: "MySQL", Icon: SiMysql, color: "#4479a1" },
+  { label: "PHP", Icon: SiPhp, color: "#777bb4" },
   { label: "Python", Icon: SiPython, color: "#3776ab" },
   { label: "Java", Icon: FaJava, color: "#f89820" },
 ];
