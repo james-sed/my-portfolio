@@ -1,26 +1,28 @@
-import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Home from './pages/Home'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Projects from './pages/Projects'
-import './App.css'
+import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/projects" element={<Projects />} />
-      </Routes>
-    </>
-  )
-}
+      {/* Keyboard users can jump straight past the nav */}
+      <a className="skip-link" href="#home">
+        Skip to content
+      </a>
 
-export default App
+      <Navbar />
+
+      <main id="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* Single-page portfolio: everything lives on the home landing. */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
