@@ -1,5 +1,6 @@
 import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiOutlineArrowUp } from "react-icons/hi";
+import { SOCIAL_LINKS } from "../site.config";
 
 const NAV = [
   { id: "home", label: "Home" },
@@ -9,24 +10,9 @@ const NAV = [
 ];
 
 const SOCIALS = [
-  {
-    id: "github",
-    href: "https://github.com/james-sed", // TODO: replace
-    Icon: FaGithub,
-    label: "GitHub",
-  },
-  {
-    id: "linkedin",
-    href: "https://www.linkedin.com/in/james-sederia-4b87383a8", // TODO: replace
-    Icon: FaLinkedinIn,
-    label: "LinkedIn",
-  },
-  {
-    id: "email",
-    href: "mailto:jjsederia08@gmail.com", // TODO: replace
-    Icon: FaEnvelope,
-    label: "Email",
-  },
+  { id: "github", Icon: FaGithub, label: "GitHub", ...SOCIAL_LINKS.github },
+  { id: "linkedin", Icon: FaLinkedinIn, label: "LinkedIn", ...SOCIAL_LINKS.linkedin },
+  { id: "email", Icon: FaEnvelope, label: "Email", ...SOCIAL_LINKS.email },
 ];
 
 export default function Footer() {

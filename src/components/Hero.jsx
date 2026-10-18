@@ -2,21 +2,7 @@ import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiArrowRight, HiOutlineDownload, HiOutlineMail } from "react-icons/hi";
 import { SiCss, SiJavascript, SiReact } from "react-icons/si";
-
-// Phrases cycled through the hero's typing effect.
-const ROLES = [
-  "Front-end Developer",
-  "Web Developer",
-  "AWS Student Builder",
-];
-
-const LINKS = {
-  // TODO: replace with your real details
-  github: "https://github.com/james-sed",
-  linkedin: "https://www.linkedin.com/in/james-sederia-4b87383a8",
-  email: "jjsederia08@gmail.com",
-  resume: "/resume-sederia.pdf",
-};
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, RESUME_URL, ROLES } from "../site.config";
 
 /** Small typewriter hook honouring prefers-reduced-motion. */
 function useTypewriter(phrases) {
@@ -97,14 +83,14 @@ export default function Hero() {
             <a className="btn btn--ghost" href="#contact">
               <HiOutlineMail aria-hidden="true" /> Contact Me
             </a>
-            <a className="btn btn--link" href={LINKS.resume} download>
+            <a className="btn btn--link" href={RESUME_URL} download>
               <HiOutlineDownload aria-hidden="true" /> Download Résumé
             </a>
           </div>
 
           <div className="hero__socials">
             <a
-              href={LINKS.github}
+              href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="James Sederia on GitHub"
@@ -112,14 +98,14 @@ export default function Hero() {
               <FaGithub size={19} aria-hidden="true" />
             </a>
             <a
-              href={LINKS.linkedin}
+              href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="James Sederia on LinkedIn"
             >
               <FaLinkedinIn size={18} aria-hidden="true" />
             </a>
-            <a href={`mailto:${LINKS.email}`} aria-label="Email James Sederia">
+            <a href={`mailto:${EMAIL}`} aria-label="Email James Sederia">
               <HiOutlineMail size={20} aria-hidden="true" />
             </a>
           </div>

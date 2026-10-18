@@ -1,6 +1,7 @@
 import { FaGithub } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import Reveal from "./Reveal";
+import { GITHUB_URL } from "../site.config";
 
 // TODO: replace the placeholder `live` / `repo` URLs and the cover images
 // with your real project links and screenshots.
@@ -12,7 +13,7 @@ const PROJECTS = [
     image: "/aws home.jpg",
     tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: "https://www.awssbgjru.me/",
-    repo: "https://github.com/james-sed",
+    repo: GITHUB_URL,
   },
   {
     title: "Event Registration System",
@@ -20,8 +21,8 @@ const PROJECTS = [
       "A fast, mobile-friendly sign-up flow with validation, confirmation states, and a clean admin-style dashboard for organizers.",
     image: "/projects/events.svg",
     tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
-    live: "#", // TODO: live URL
-    repo: "https://github.com/james-sed",
+    live: GITHUB_URL,
+    repo: GITHUB_URL,
   },
 ];
 

@@ -2,38 +2,26 @@ import { useState } from "react";
 import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import Reveal from "./Reveal";
-
-// TODO: replace with your real details
-const LINKS = {
-  github: "https://github.com/james-sed",
-  linkedin: "https://www.linkedin.com/in/james-sederia-4b87383a8",
-  email: "jjsederia08@gmail.com",
-};
+import { SOCIAL_LINKS } from "../site.config";
 
 const METHODS = [
   {
     id: "email",
-    href: `mailto:${LINKS.email}`,
     Icon: FaEnvelope,
-    label: LINKS.email,
-    hint: "Best for quick questions",
     external: false,
+    ...SOCIAL_LINKS.email,
   },
   {
     id: "github",
-    href: LINKS.github,
     Icon: FaGithub,
-    label: "github.com/james-sed",
-    hint: "Code, PRs, experiments",
     external: true,
+    ...SOCIAL_LINKS.github,
   },
   {
     id: "linkedin",
-    href: LINKS.linkedin,
     Icon: FaLinkedinIn,
-    label: "in/james-sederia",
-    hint: "Professional updates",
     external: true,
+    ...SOCIAL_LINKS.linkedin,
   },
 ];
 
