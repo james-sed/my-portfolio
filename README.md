@@ -1,16 +1,100 @@
-# React + Vite
+# James Sederia — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> Personal portfolio of James Sederia — Front-end Developer & AWS Student Builder
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
+[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red)](#license)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Live demo:** coming soon — [TODO: add deployed URL]
 
-## React Compiler
+<!-- TODO: replace this placeholder by committing a real screenshot at docs/preview.png -->
+![Portfolio preview placeholder — replace with a real screenshot at docs/preview.png](docs/preview.png)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## About
 
-## Expanding the Oxlint configuration
+This is my personal portfolio site — a fast, single-page introduction to who I am, what I've built, and how to reach me. It features my projects, tech stack, and a downloadable resume in a clean, distraction-free layout. Built for recruiters, collaborators, and anyone curious about my work.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Features
+
+- **Responsive layout** — fluid type scale and a mobile nav menu, from phones to wide screens
+- **Dark / light mode** — toggle in the navbar; also respects your system preference
+- **Hero typing animation** — cycles through my roles on load
+- **Projects section** — featured work with tech tags and links to demos and code
+- **Scroll-reveal animations** — sections fade in as you scroll (auto-disabled for `prefers-reduced-motion`)
+- **Contact section** — direct email, GitHub, and LinkedIn links plus a form with required-field validation
+  - _Note: the form is UI-only for now — not yet connected to a mail service ([TODO: Formspree / EmailJS])_
+- **Resume download** — one-click PDF download
+- **Accessibility** — skip-to-content link, semantic landmarks, and ARIA labels
+- **SEO & social meta** — Open Graph and Twitter tags with a canonical URL
+
+## Tech stack
+
+| Tool | What it's for |
+| --- | --- |
+| [React 19](https://react.dev) | UI library |
+| [Vite 8](https://vite.dev) | Dev server and production build |
+| [React Router 7](https://reactrouter.com) | Routing (serves `/`, redirects everything else home) |
+| [react-icons](https://react-icons.github.io/react-icons/) | Icon set (GitHub, LinkedIn, etc.) |
+| [Oxlint](https://oxc.rs) | Linter |
+| Plain CSS | Hand-written styles — no CSS framework |
+
+## Project structure
+
+```
+.
+├── index.html            # Entry HTML — SEO/meta tags, Google Fonts
+├── vite.config.js        # Vite configuration
+├── package.json          # Scripts and dependencies
+├── public/               # Static files served as-is (photos, resume PDF, favicon)
+└── src/
+    ├── main.jsx          # App entry — wraps everything in Router + ThemeProvider
+    ├── App.jsx           # Routes: "/" renders Home, all other paths redirect to "/"
+    ├── site.config.js    # Single source of truth: name, email, social links, roles
+    ├── pages/Home.jsx    # Composes all sections into one page
+    ├── components/       # Navbar, Hero, About, Skills, Projects, Contact, Footer, Reveal
+    ├── contexts/         # ThemeContext — dark/light mode state
+    ├── index.css         # Design tokens, base styles, dark-mode surfaces
+    └── App.css           # Component styles
+```
+
+## Getting started
+
+### Prerequisites
+
+- **Node.js** `^20.19.0` or `>=22.12.0` (required by Vite 8)
+- npm (included with Node)
+
+### Install and run
+
+```bash
+git clone https://github.com/james-sed/my-portfolio.git
+cd my-portfolio
+npm install
+npm run dev
+```
+
+The dev server starts at `http://localhost:5173` with hot module replacement.
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Lint the project with Oxlint |
+
+## Deployment
+
+This is a static site — run `npm run build` and host the `dist/` folder on any static host (Vercel, Netlify, or GitHub Pages all work). [TODO: pick a platform and add its config — if you use GitHub Pages, you'll also need to set `base` in `vite.config.js` and add an SPA fallback like `404.html`]
+
+## Contact
+
+- **Email:** [jjsederia08@gmail.com](mailto:jjsederia08@gmail.com)
+- **LinkedIn:** [in/james-sederia](https://www.linkedin.com/in/james-sederia-4b87383a8)
+- **GitHub:** [github.com/james-sed](https://github.com/james-sed)
+
+## License
+
+All rights reserved — no license file yet. [TODO: add an MIT `LICENSE` file if you want to open-source this project.]
