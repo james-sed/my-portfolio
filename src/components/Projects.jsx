@@ -43,6 +43,15 @@ const PROJECTS = [
     live: GITHUB_URL,
     repo: "https://github.com/zxyrone-zxcy/signwiseasl",
   },
+  {
+    title: "EduPath: IT Recommender System Using ML",
+    description:
+      "Co-developed a machine learning-based recommender system for IT and CSE courses and programs offered in JRU.",
+    image: `${import.meta.env.BASE_URL}edupath.jpg`,
+    tags: ["HTML", "CSS", "JavaScript", "Python", "PostgreSQL", "ML"],
+    live: GITHUB_URL,
+    repo: "https://github.com/james-sed/EduPath",
+  },
 ];
 
 const VISIBLE = 2;
