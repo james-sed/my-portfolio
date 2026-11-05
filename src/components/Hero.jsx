@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiArrowRight, HiOutlineDownload, HiOutlineMail } from "react-icons/hi";
-import { SiCss, SiJavascript, SiReact } from "react-icons/si";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, RESUME_URL, ROLES } from "../site.config";
 
 /** Small typewriter hook honouring prefers-reduced-motion. */
@@ -111,56 +110,23 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ---- Right: illustration (code window + floating chips) ---- */}
+        {/* ---- Right: profile photo card ---- */}
         <div className="hero__visual">
-          <div className="codecard" aria-hidden="true">
-            <div className="codecard__bar">
-              <span className="codecard__dot codecard__dot--r" />
-              <span className="codecard__dot codecard__dot--y" />
-              <span className="codecard__dot codecard__dot--g" />
-              <span className="codecard__file">portfolio.jsx</span>
-            </div>
-            <pre className="codecard__code">
-              <code>
-                <span className="tok-com">{"// clean, accessible, fast"}</span>
-                {"\n"}
-                <span className="tok-key">const</span>
-                {" developer = {\n"}
-                {"  name: "}
-                <span className="tok-str">{"'James Sederia'"}</span>
-                {",\n  role: "}
-                <span className="tok-str">{"'Front-end Developer'"}</span>
-                {",\n  stack: ["}
-                <span className="tok-str">{"'React', 'JS', 'CSS'"}</span>
-                {"] ,\n  status: "}
-                <span className="tok-fn">{"openToWork"}</span>
-                {"\n};\n"}
-              </code>
-            </pre>
-          </div>
-
-          <span className="chip chip--1" aria-hidden="true" style={{ "--chip-color": "#61dafb" }}>
-            <SiReact /> React
-          </span>
-          <span className="chip chip--2" aria-hidden="true" style={{ "--chip-color": "#f7df1e" }}>
-            <SiJavascript /> JavaScript
-          </span>
-          <span className="chip chip--3" aria-hidden="true" style={{ "--chip-color": "#1572b6" }}>
-            <SiCss /> CSS
-          </span>
-
-          <div className="hero__badge">
-            <span className="hero__badge-avatar" aria-hidden="true">
-              JS
+          <figure className="hero-photo">
+            <img
+              className="hero-photo__img"
+              src={`${import.meta.env.BASE_URL}hero-photo-james.jpg`}
+              alt="James Sederia, front-end developer and Vice Chief of Technology at AWS SBG JRU"
+              width="853"
+              height="1200"
+              loading="eager"
+              decoding="async"
+            />
+            <span className="hero-photo__status">
+              <span className="hero-photo__dot" aria-hidden="true" />
+              Open to work
             </span>
-            <span>
-              <small>Availability</small>
-              <strong>
-                <span className="status-dot" aria-hidden="true" />
-                Open to work
-              </strong>
-            </span>
-          </div>
+          </figure>
         </div>
       </div>
     </section>

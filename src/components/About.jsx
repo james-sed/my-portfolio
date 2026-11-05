@@ -30,7 +30,7 @@ const FACTS = [
     Icon: HiOutlineLightningBolt,
     text: (
       <>
-        Currently building an <strong>Event Registration System</strong>
+        Currently building an <strong>Event Registration System and more</strong>
       </>
     ),
   },
@@ -73,14 +73,13 @@ export default function About() {
           <p>
             My journey into web development started with AWS. After joining the
             Student Builders group, I grew into front-end development and helped
-            ship our group's website — now published and running. I still
+            ship our group's website which is now published and running. I still
             remember how proud the team was on launch day.
           </p>
           <p>
             Today I focus on building interfaces that are fast, readable, and
-            enjoyable to use — clean HTML, thoughtful CSS, and React that
-            scales. If it needs to load fast and feel good under your fingers,
-            I'm in.
+            enjoyable to use. Clean HTML, CSS, and React that
+            scales.
           </p>
 
           <ul className="about-facts">
