@@ -10,7 +10,7 @@ export const GITHUB_URL = "https://github.com/james-sed";
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/james-sederia-4b87383a8";
 
-export const RESUME_URL = "/resume-sederia.pdf";
+export const RESUME_URL = `${import.meta.env.BASE_URL}resume-sederia.pdf`;
 
 // Phrases cycled through the hero's typing effect.
 export const ROLES = [

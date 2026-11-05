@@ -55,7 +55,7 @@ export default function About() {
       <div className="container about-grid">
         <Reveal className="about-portrait">
           <img
-            src="/professional-pic-james.jpg"
+            src={`${import.meta.env.BASE_URL}professional-pic-james.jpg`}
             alt="Portrait of James Sederia"
             width="713"
             height="871"

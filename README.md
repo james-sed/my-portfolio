@@ -1,19 +1,14 @@
 # James Sederia — Portfolio
 
-> Personal portfolio of James Sederia — Front-end Developer & AWS Student Builder
+> Personal portfolio of James Sederia, a Front-end Developer & AWS Student Builder
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
-[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red)](#license)
 
-**Live demo:** coming soon — [TODO: add deployed URL]
-
-<!-- TODO: replace this placeholder by committing a real screenshot at docs/preview.png -->
-![Portfolio preview placeholder — replace with a real screenshot at docs/preview.png](docs/preview.png)
 
 ## About
 
-This is my personal portfolio site — a fast, single-page introduction to who I am, what I've built, and how to reach me. It features my projects, tech stack, and a downloadable resume in a clean, distraction-free layout. Built for recruiters, collaborators, and anyone curious about my work.
+This is my personal portfolio website, a fast, single-page introduction to who I am, what I've built, and how to reach me. It features my projects, tech stack, and a downloadable resume in a clean, distraction-free layout. Built for recruiters, collaborators, and anyone curious about my work.
 
 ## Features
 
@@ -23,7 +18,7 @@ This is my personal portfolio site — a fast, single-page introduction to who I
 - **Projects section** — featured work with tech tags and links to demos and code
 - **Scroll-reveal animations** — sections fade in as you scroll (auto-disabled for `prefers-reduced-motion`)
 - **Contact section** — direct email, GitHub, and LinkedIn links plus a form with required-field validation
-  - _Note: the form is UI-only for now — not yet connected to a mail service ([TODO: Formspree / EmailJS])_
+  - _Note: the form is UI-only for now
 - **Resume download** — one-click PDF download
 - **Accessibility** — skip-to-content link, semantic landmarks, and ARIA labels
 - **SEO & social meta** — Open Graph and Twitter tags with a canonical URL
@@ -85,16 +80,8 @@ The dev server starts at `http://localhost:5173` with hot module replacement.
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Lint the project with Oxlint |
 
-## Deployment
-
-This is a static site — run `npm run build` and host the `dist/` folder on any static host (Vercel, Netlify, or GitHub Pages all work). [TODO: pick a platform and add its config — if you use GitHub Pages, you'll also need to set `base` in `vite.config.js` and add an SPA fallback like `404.html`]
-
 ## Contact
 
 - **Email:** [jjsederia08@gmail.com](mailto:jjsederia08@gmail.com)
 - **LinkedIn:** [in/james-sederia](https://www.linkedin.com/in/james-sederia-4b87383a8)
 - **GitHub:** [github.com/james-sed](https://github.com/james-sed)
-
-## License
-
-All rights reserved — no license file yet. [TODO: add an MIT `LICENSE` file if you want to open-source this project.]
