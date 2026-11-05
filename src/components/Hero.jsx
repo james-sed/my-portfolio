@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiArrowRight, HiOutlineDownload, HiOutlineMail } from "react-icons/hi";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, RESUME_URL, ROLES } from "../site.config";
+import { PROJECTS } from "../data/projects";
+
+// Change this index to feature a different project in the hero.
+const FEATURED_PROJECT_INDEX = 0;
+const FEATURED_TAG_PRIORITY = ["Vanilla HTML", "JavaScript", "Supabase"];
 
 /** Small typewriter hook honouring prefers-reduced-motion. */
 function useTypewriter(phrases) {
@@ -42,6 +47,15 @@ function useTypewriter(phrases) {
 
 export default function Hero() {
   const typed = useTypewriter(ROLES);
+  const featured = PROJECTS[FEATURED_PROJECT_INDEX];
+  const featuredTags = [
+    ...FEATURED_TAG_PRIORITY.filter((tag) => featured.tags.includes(tag)),
+    ...featured.tags.filter((tag) => !FEATURED_TAG_PRIORITY.includes(tag)),
+  ].slice(0, 3);
+  const featuredSlug = featured.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
   return (
     <section className="hero" id="home" aria-labelledby="hero-title">
@@ -50,10 +64,6 @@ export default function Hero() {
       <div className="container hero__inner">
         {/* ---- Left: message + calls to action ---- */}
         <div className="hero__content">
-          <p className="eyebrow">
-            <span className="eyebrow__dot" aria-hidden="true" />
-            AWS SBG JRU · Vice Chief of Technology
-          </p>
 
           <h1 className="hero__title" id="hero-title">
             <span>James Sederia</span>
@@ -110,23 +120,39 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ---- Right: profile photo card ---- */}
+        {/* ---- Right: featured project preview ---- */}
         <div className="hero__visual">
-          <figure className="hero-photo">
-            <img
-              className="hero-photo__img"
-              src={`${import.meta.env.BASE_URL}hero-photo-james.jpg`}
-              alt="James Sederia, front-end developer and Vice Chief of Technology at AWS SBG JRU"
-              width="853"
-              height="1200"
-              loading="eager"
-              decoding="async"
-            />
-            <span className="hero-photo__status">
-              <span className="hero-photo__dot" aria-hidden="true" />
-              Open to work
+          <aside className="hero-feature" aria-label="Featured project">
+            <span className="hero-feature__badge">
+              <span className="hero-feature__badge-dot" aria-hidden="true" />
+              Featured
             </span>
-          </figure>
+
+            <div className="hero-feature__browser">
+              <div className="hero-feature__bar" aria-hidden="true">
+                <span className="hero-feature__window-dot" />
+                <span className="hero-feature__window-dot" />
+                <span className="hero-feature__window-dot" />
+                <span className="hero-feature__url">{featuredSlug}</span>
+              </div>
+              <div className="hero-feature__media">
+                <img
+                  src={featured.image}
+                  alt={`Preview of the ${featured.title} project`}
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            </div>
+
+            <div className="hero-feature__body">
+              <h2 className="hero-feature__title">{featured.title}</h2>
+              <p className="hero-feature__desc">{featured.description}</p>
+              <a className="hero-feature__link" href="#projects">
+                View project <HiArrowRight aria-hidden="true" />
+              </a>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
