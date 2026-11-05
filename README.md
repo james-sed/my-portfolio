@@ -15,7 +15,7 @@ This is my personal portfolio website, a fast, single-page introduction to who I
 - **Responsive layout** — fluid type scale and a mobile nav menu, from phones to wide screens
 - **Dark / light mode** — toggle in the navbar; also respects your system preference
 - **Hero typing animation** — cycles through my roles on load
-- **Projects section** — featured work with tech tags and links to demos and code
+- **Projects section** — featured work in an interactive 3D coverflow carousel with tech tags, demo/code links, arrow buttons, dot indicators, keyboard navigation, and swipe support
 - **Scroll-reveal animations** — sections fade in as you scroll (auto-disabled for `prefers-reduced-motion`)
 - **Contact section** — direct email, GitHub, and LinkedIn links plus a form with required-field validation
   - _Note: the form is UI-only for now
