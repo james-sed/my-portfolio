@@ -50,9 +50,6 @@ export default function Navbar() {
     <header className="navbar">
       <div className="container navbar__inner">
         <a className="brand" href="#home" onClick={close} aria-label="James Sederia — back to top">
-          <span className="brand__mark" aria-hidden="true">
-            JS
-          </span>
           <span className="brand__text">James Sederia</span>
         </a>
 
