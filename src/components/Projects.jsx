@@ -33,6 +33,15 @@ const PROJECTS = [
     live: GITHUB_URL,
     repo: "https://github.com/james-sed/PH-Wage-Dashboard",
   },
+  {
+    title: "SignWise - Sign Language Learning Website",
+    description:
+      "Co-developed a beginner-friendly web application designed to teach basic American Sign Language (ASL) using MediaPipe and quizzes.",
+    image: `${import.meta.env.BASE_URL}signwise.jpg`,
+    tags: ["Laravel", "PHP", "Bootstrap", "JavaScript", "CSS", "HTML", "Tailwind CSS", "MediaPipe"],
+    live: GITHUB_URL,
+    repo: "https://github.com/zxyrone-zxcy/signwiseasl",
+  },
 ];
 
 export default function Projects() {
