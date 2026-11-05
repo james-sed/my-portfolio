@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="footer__inner">
           <div className="footer__brand">
             <strong>James Sederia</strong>
-            <span>Front-end Developer · AWS SBG JRU</span>
+            <span>Front-end Developer · Web Development</span>
           </div>
 
           <nav className="footer__nav" aria-label="Footer">
