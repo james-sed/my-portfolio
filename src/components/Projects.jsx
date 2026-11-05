@@ -13,7 +13,7 @@ const PROJECTS = [
     image: `${import.meta.env.BASE_URL}aws-home.jpg`,
     tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: "https://www.awssbgjru.me/",
-    repo: GITHUB_URL,
+    repo: "https://github.com/migsrvr/awssbgjru",
   },
   {
     title: "Event Registration System",
