@@ -10,11 +10,25 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--nav-bg);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
   border-bottom: 1px solid var(--border);
-  transition: background-color 0.35s var(--ease), border-color 0.35s var(--ease);
+  transition: border-color 0.35s var(--ease);
+}
+
+/* Frosted backdrop lives on a pseudo-element so the navbar itself does NOT
+   establish a containing block for position: fixed descendants (the mobile
+   menu). Applying backdrop-filter directly to .navbar made the menu position
+   relative to the 68px header instead of the viewport, which caused the
+   right-shifted, clipped panel. */
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  transition: background-color 0.35s var(--ease);
+  pointer-events: none;
 }
 
 .navbar__inner {
@@ -103,7 +117,7 @@
   cursor: pointer;
 }
 
-/* Mobile slide-in menu */
+/* Mobile dropdown menu */
 @media (max-width: 860px) {
   .navbar__toggle {
     display: inline-flex;
@@ -111,40 +125,62 @@
 
   .navbar__nav {
     position: fixed;
-    inset: 0 0 0 auto;
-    width: min(310px, 84vw);
+    top: var(--nav-h);
+    left: 0;
+    right: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - var(--nav-h));
+    max-height: calc(100dvh - var(--nav-h));
+    margin: 0;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.3rem;
-    padding: calc(var(--nav-h) + 1rem) 1.4rem 2rem;
+    gap: 0.25rem;
+    padding: 0.5rem 0 1rem;
+    /* Opaque in every browser; color-mix lets the blur add depth where supported */
     background: var(--surface-strong);
-    border-left: 1px solid var(--border);
-    box-shadow: -24px 0 60px -30px rgba(0, 0, 0, 0.4);
-    transform: translateX(100%);
-    visibility: hidden;
-    transition: transform 0.35s var(--ease), visibility 0.35s var(--ease);
-    z-index: 200;
+    background: color-mix(in srgb, var(--surface-strong) 97%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.55);
+    overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.2s var(--ease),
+      transform 0.2s var(--ease),
+      visibility 0.2s var(--ease);
   }
 
   .navbar__nav.is-open {
-    transform: translateX(0);
+    opacity: 1;
     visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .navbar__nav a:not(.btn) {
+    display: block;
+    width: 100%;
     font-size: 1.05rem;
-    padding: 0.95rem 0.9rem;
+    padding: 1rem max(24px, var(--gutter));
     border-radius: 12px;
   }
 
   .navbar__cta {
-    margin: 0.75rem 0 0;
+    margin: 0.75rem max(24px, var(--gutter)) 0;
     justify-content: center;
   }
 
   .theme-toggle {
-    margin: 0.75rem 0 0;
+    margin: 0.75rem max(24px, var(--gutter)) 0;
     align-self: flex-start;
   }
 }

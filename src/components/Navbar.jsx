@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiMenu, HiMoon, HiSun, HiX } from "react-icons/hi";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -13,6 +13,8 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
+  const navRef = useRef(null);
+  const toggleRef = useRef(null);
 
   // Scrollspy — highlight the section currently in view.
   useEffect(() => {
@@ -44,6 +46,46 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // A click/tap outside the panel (or the toggle) closes the mobile menu.
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const onPointerDown = (e) => {
+      if (
+        navRef.current?.contains(e.target) ||
+        toggleRef.current?.contains(e.target)
+      ) {
+        return;
+      }
+      setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [open]);
+
+  // Close the menu if the viewport grows past the mobile breakpoint, so the
+  // scroll lock is always released when the desktop layout takes over.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 861px)");
+    const onChange = (e) => {
+      if (e.matches) setOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const close = () => setOpen(false);
 
   return (
@@ -54,6 +96,7 @@ export default function Navbar() {
         </a>
 
         <button
+          ref={toggleRef}
           className="navbar__toggle"
           type="button"
           onClick={() => setOpen((o) => !o)}
@@ -69,6 +112,7 @@ export default function Navbar() {
         </button>
 
         <nav
+          ref={navRef}
           id="primary-nav"
           className={`navbar__nav${open ? " is-open" : ""}`}
           aria-label="Primary"
