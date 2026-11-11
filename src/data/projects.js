@@ -36,7 +36,7 @@ export const PROJECTS = [
       "Co-developed a beginner-friendly web application designed to teach basic American Sign Language (ASL) using MediaPipe and quizzes.",
     image: `${import.meta.env.BASE_URL}signwise.jpg`,
     tags: ["Laravel", "PHP", "Bootstrap", "JavaScript", "CSS", "HTML", "Tailwind CSS", "MediaPipe"],
-    live: GITHUB_URL,
+    live: "https://signwiseasl.vercel.app/",
     repo: "https://github.com/zxyrone-zxcy/signwiseasl",
   },
   {
