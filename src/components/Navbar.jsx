@@ -15,6 +15,7 @@ export default function Navbar() {
   const [active, setActive] = useState("home");
   const navRef = useRef(null);
   const toggleRef = useRef(null);
+  const indicatorRef = useRef(null);
 
   // Scrollspy — highlight the section currently in view.
   useEffect(() => {
@@ -35,6 +36,40 @@ export default function Navbar() {
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
+
+  // Update sliding active indicator on desktop
+  useEffect(() => {
+    const nav = navRef.current;
+    const indicator = indicatorRef.current;
+    if (!nav || !indicator) return undefined;
+
+    const updateIndicator = () => {
+      if (window.innerWidth <= 860) {
+        indicator.style.opacity = "0";
+        return;
+      }
+
+      const activeEl = nav.querySelector(`a[href="#${active}"]:not(.btn)`);
+      if (!activeEl) {
+        indicator.style.opacity = "0";
+        return;
+      }
+
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = activeEl.getBoundingClientRect();
+      const x = linkRect.left - navRect.left;
+      const y = linkRect.top - navRect.top;
+
+      indicator.style.width = `${linkRect.width}px`;
+      indicator.style.height = `${linkRect.height}px`;
+      indicator.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      indicator.style.opacity = "1";
+    };
+
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [active]);
 
   // Escape closes the mobile menu.
   useEffect(() => {
@@ -91,7 +126,13 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="container navbar__inner">
-        <a className="brand" href="#home" onClick={close} aria-label="James Sederia — back to top">
+        <a
+          className="brand nav-enter"
+          href="#home"
+          onClick={close}
+          aria-label="James Sederia — back to top"
+          style={{ "--enter-d": "0.05s" }}
+        >
           <span className="brand__text">James Sederia</span>
         </a>
 
@@ -117,30 +158,41 @@ export default function Navbar() {
           className={`navbar__nav${open ? " is-open" : ""}`}
           aria-label="Primary"
         >
-          {LINKS.map(({ id, label }) => (
+          <span
+            ref={indicatorRef}
+            className="navbar__indicator"
+            aria-hidden="true"
+          />
+
+          {LINKS.map(({ id, label }, i) => (
             <a
               key={id}
               href={`#${id}`}
-              className={active === id ? "is-active" : undefined}
+              className={[active === id ? "is-active" : "", "nav-enter"]
+                .filter(Boolean)
+                .join(" ")}
               aria-current={active === id ? "true" : undefined}
               onClick={close}
+              style={{ "--enter-d": `${0.1 + i * 0.05}s` }}
             >
               {label}
             </a>
           ))}
 
           <a
-            className="btn btn--primary navbar__cta"
+            className="btn btn--primary navbar__cta nav-enter"
             href="#contact"
             onClick={close}
+            style={{ "--enter-d": "0.3s" }}
           >
             Hire me
           </a>
 
           <button
-            className="theme-toggle"
+            className="theme-toggle nav-enter"
             type="button"
             onClick={toggleTheme}
+            style={{ "--enter-d": "0.35s" }}
             aria-label={
               theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
             }

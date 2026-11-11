@@ -79,6 +79,31 @@
   background: var(--accent-soft);
 }
 
+/* Animated active-link indicator (desktop only) */
+@media (min-width: 861px) {
+  .navbar__nav {
+    position: relative;
+  }
+
+  .navbar__nav a.is-active {
+    background: transparent;
+  }
+
+  .navbar__indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+    transition:
+      transform 0.3s var(--ease),
+      opacity 0.25s var(--ease);
+  }
+}
+
 .navbar__cta {
   margin-left: 0.5rem;
 }
@@ -200,6 +225,8 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  transition: transform 0.6s ease-out;
+  will-change: transform;
 }
 
 .hero__bg::before,
@@ -552,12 +579,18 @@
   background: var(--surface-strong);
   box-shadow: var(--card-shadow);
   text-align: center;
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  transition:
+    transform 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
 }
 
 .skill-card:hover {
   transform: translateY(-5px);
   border-color: var(--border-strong);
+  box-shadow:
+    0 14px 32px -10px rgba(0, 0, 0, 0.12),
+    var(--card-shadow);
 }
 
 .skill-card__icon {
@@ -920,12 +953,18 @@
   background: var(--surface-strong);
   color: var(--heading);
   box-shadow: var(--card-shadow);
-  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease);
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
 }
 
 .contact-method:hover {
   transform: translateY(-3px);
   border-color: var(--primary);
+  box-shadow:
+    0 12px 28px -8px rgba(0, 0, 0, 0.1),
+    var(--card-shadow);
 }
 
 .contact-method__icon {

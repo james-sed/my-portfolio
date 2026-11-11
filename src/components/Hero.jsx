@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiArrowRight, HiOutlineDownload, HiOutlineMail } from "react-icons/hi";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, RESUME_URL, ROLES } from "../site.config";
@@ -6,7 +6,6 @@ import { PROJECTS } from "../data/projects";
 
 // Change this index to feature a different project in the hero.
 const FEATURED_PROJECT_INDEX = 0;
-const FEATURED_TAG_PRIORITY = ["Vanilla HTML", "JavaScript", "Supabase"];
 
 /** Small typewriter hook honouring prefers-reduced-motion. */
 function useTypewriter(phrases) {
@@ -48,24 +47,51 @@ function useTypewriter(phrases) {
 export default function Hero() {
   const typed = useTypewriter(ROLES);
   const featured = PROJECTS[FEATURED_PROJECT_INDEX];
-  const featuredTags = [
-    ...FEATURED_TAG_PRIORITY.filter((tag) => featured.tags.includes(tag)),
-    ...featured.tags.filter((tag) => !FEATURED_TAG_PRIORITY.includes(tag)),
-  ].slice(0, 3);
   const featuredSlug = featured.title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+  const bgRef = useRef(null);
+
+  // Subtle parallax on hero glow — disabled for touch / reduced-motion.
+  useEffect(() => {
+    const bg = bgRef.current;
+    if (!bg) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    let rafId = null;
+    const onMove = (e) => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        bg.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        rafId = null;
+      });
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <section className="hero" id="home" aria-labelledby="hero-title">
-      <div className="hero__bg" aria-hidden="true" />
+      <div className="hero__bg" ref={bgRef} aria-hidden="true" />
 
       <div className="container hero__inner">
         {/* ---- Left: message + calls to action ---- */}
         <div className="hero__content">
 
-          <h1 className="hero__title" id="hero-title">
+          <h1
+            className="hero__title hero-enter"
+            id="hero-title"
+            style={{ "--enter-d": "0.1s" }}
+          >
             <span>James Sederia</span>
             <span className="hero__role">
               <span className="hero__role-text" aria-hidden="true">
@@ -76,7 +102,7 @@ export default function Hero() {
             <span className="sr-only">{ROLES[0]}</span>
           </h1>
 
-          <p className="hero__lead">
+          <p className="hero__lead hero-enter" style={{ "--enter-d": "0.2s" }}>
             I build clean, accessible, and fast interfaces for the web. I work
             with{" "}
             <strong className="highlight">
@@ -85,7 +111,10 @@ export default function Hero() {
             to turn designs into polished, user-friendly experiences.
           </p>
 
-          <div className="hero__actions">
+          <div
+            className="hero__actions hero-enter"
+            style={{ "--enter-d": "0.3s" }}
+          >
             <a className="btn btn--primary" href="#projects">
               View Projects <HiArrowRight aria-hidden="true" />
             </a>
@@ -97,7 +126,10 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="hero__socials">
+          <div
+            className="hero__socials hero-enter"
+            style={{ "--enter-d": "0.4s" }}
+          >
             <a
               href={GITHUB_URL}
               target="_blank"
@@ -121,7 +153,10 @@ export default function Hero() {
         </div>
 
         {/* ---- Right: featured project preview ---- */}
-        <div className="hero__visual">
+        <div
+          className="hero__visual hero-enter"
+          style={{ "--enter-d": "0.5s" }}
+        >
           <aside className="hero-feature" aria-label="Featured project">
             <span className="hero-feature__badge">
               <span className="hero-feature__badge-dot" aria-hidden="true" />
