@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import Reveal from "./Reveal";
+import { GITHUB_URL } from "../site.config";
 import { PROJECTS } from "../data/projects";
 
 const VISIBLE = 2;
@@ -137,14 +138,17 @@ export default function Projects() {
                         ))}
                       </ul>
                       <div className="project-card__links">
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          tabIndex={isActive ? 0 : -1}
-                        >
-                          <HiOutlineExternalLink aria-hidden="true" /> Live demo
-                        </a>
+                        {project.live && project.live !== GITHUB_URL && (
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            tabIndex={isActive ? 0 : -1}
+                          >
+                            <HiOutlineExternalLink aria-hidden="true" /> Live
+                            demo
+                          </a>
+                        )}
                         <a
                           href={project.repo}
                           target="_blank"
