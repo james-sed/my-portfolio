@@ -55,19 +55,29 @@ export default function Navbar() {
         return;
       }
 
-      const navRect = nav.getBoundingClientRect();
-      const linkRect = activeEl.getBoundingClientRect();
-      const x = linkRect.left - navRect.left;
-      const y = linkRect.top - navRect.top;
+      // Use layout offsets rather than getBoundingClientRect(): the links are
+      // mid entrance animation (fade-down starts at translateY(-12px)) when
+      // this effect first runs, and rects include that transform. Offsets
+      // ignore transforms and are already relative to the nav, the indicator's
+      // offsetParent.
+      const {
+        offsetLeft: x,
+        offsetTop: y,
+        offsetWidth,
+        offsetHeight,
+      } = activeEl;
 
-      indicator.style.width = `${linkRect.width}px`;
-      indicator.style.height = `${linkRect.height}px`;
+      indicator.style.width = `${offsetWidth}px`;
+      indicator.style.height = `${offsetHeight}px`;
       indicator.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       indicator.style.opacity = "1";
     };
 
     updateIndicator();
     window.addEventListener("resize", updateIndicator);
+    // Measure again once webfonts have swapped in, or the pill keeps the
+    // fallback font's metrics.
+    document.fonts?.ready.then(updateIndicator);
     return () => window.removeEventListener("resize", updateIndicator);
   }, [active]);
 
