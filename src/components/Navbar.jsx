@@ -24,11 +24,44 @@ export default function Navbar() {
     );
     if (!sections.length) return undefined;
 
+    // Remember the latest entry for every section so one callback can pick a
+    // single winner instead of letting the last intersecting entry win.
+    const entriesById = new Map();
+
+    const updateActive = () => {
+      // Page is at the bottom: the footer can cover the middle band, so pin
+      // the last section instead of leaving a stale highlight.
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        setActive(sections[sections.length - 1].id);
+        return;
+      }
+
+      let bestId = null;
+      let bestDistance = Infinity;
+
+      entriesById.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const rect = entry.boundingClientRect;
+        const distance = Math.abs(
+          rect.top + rect.height / 2 - window.innerHeight * 0.475,
+        );
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestId = entry.target.id;
+        }
+      });
+
+      // setActive replaces the previous id, so only one link is ever lit.
+      if (bestId) setActive(bestId);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
+        entries.forEach((entry) => entriesById.set(entry.target.id, entry));
+        updateActive();
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
@@ -181,7 +214,7 @@ export default function Navbar() {
               className={[active === id ? "is-active" : "", "nav-enter"]
                 .filter(Boolean)
                 .join(" ")}
-              aria-current={active === id ? "true" : undefined}
+              aria-current={active === id ? "page" : undefined}
               onClick={close}
               style={{ "--enter-d": `${0.1 + i * 0.05}s` }}
             >

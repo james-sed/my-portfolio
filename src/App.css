@@ -69,14 +69,21 @@
   transition: color 0.25s var(--ease), background-color 0.25s var(--ease);
 }
 
-.navbar__nav a:not(.btn):hover {
+/* Non-active links get only a faint wash on hover. The solid pill is reserved
+   for the active link (and its sliding indicator). */
+.navbar__nav a:not(.btn):not(.is-active):hover {
   color: var(--heading);
-  background: var(--accent-soft);
+  background: var(--accent-ghost);
 }
 
 .navbar__nav a.is-active {
   color: var(--accent-text);
   background: var(--accent-soft);
+}
+
+.navbar__nav a:not(.btn):focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
 }
 
 /* Animated active-link indicator (desktop only) */
