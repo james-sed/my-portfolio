@@ -16,7 +16,7 @@ export const PROJECTS = [
     title: "Event Registration System",
     description:
       "A fast, mobile-friendly sign-up flow with validation, confirmation states, and a clean admin-style dashboard for organizers.",
-    image: `${import.meta.env.BASE_URL}projects/events.svg`,
+    image: `${import.meta.env.BASE_URL}event-aws.jpg`,
     tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: GITHUB_URL,
     repo: "https://github.com/AWS-Student-Builder-Group-JRU/AWS---Event-Website",
