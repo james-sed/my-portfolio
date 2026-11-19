@@ -22,8 +22,7 @@ This is my personal portfolio website: a fast, single-page introduction to who I
 - **Skills section** — a grid of the languages, tools, and platforms I work with
 - **Projects carousel** — an interactive 3D coverflow with tech tags, demo/code links, arrow and dot controls, keyboard navigation, and swipe support
 - **Scroll-reveal animations** — sections fade in as you scroll and are disabled for `prefers-reduced-motion`
-- **Contact section** — direct email, GitHub, and LinkedIn links plus a required-field form
-  - _Note: the form is UI-only for now. See [Known limitations](#known-limitations)._
+- **Contact section** — direct email, GitHub, and LinkedIn links plus a required-field form that emails me through [Resend](https://resend.com)
 - **Résumé download** — one-click PDF download
 - **Accessibility** — skip link, semantic landmarks, ARIA labels, and visible keyboard focus styles
 - **SEO & social sharing** — Open Graph and Twitter cards with a canonical URL, sitemap, and robots file
@@ -36,6 +35,8 @@ This is my personal portfolio website: a fast, single-page introduction to who I
 | [Vite 8](https://vite.dev) | Dev server and production build |
 | [React Router 7](https://reactrouter.com) | Routing (serves `/`, redirects everything else home) |
 | [react-icons](https://react-icons.github.io/react-icons/) | Icon set (GitHub, LinkedIn, etc.) |
+| [Resend](https://resend.com) | Delivers contact-form email (installed from the Vercel Marketplace) |
+| [Vercel Functions](https://vercel.com/docs/functions) | `/api/contact` endpoint that validates and forwards messages |
 | [Oxlint](https://oxc.rs) | Linter |
 | Plain CSS | Hand-written styles — no CSS framework |
 
@@ -75,8 +76,9 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 ```
 .
 ├── index.html            # Entry HTML — SEO/social meta tags, Google Fonts
-├── vite.config.js        # Vite configuration
+├── vite.config.js        # Vite configuration (also serves /api locally)
 ├── vercel.json           # Vercel SPA rewrite
+├── api/contact.js        # Contact form endpoint — validates, then sends via Resend
 ├── package.json          # Scripts and dependencies
 ├── public/               # Static files served as-is
 │   ├── projects/         # Project cover art
@@ -109,7 +111,8 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 The site is set up for **Vercel**. `vercel.json` rewrites all routes to `index.html` so client-side routing works on refresh and direct links.
 
 - Pushing to `main` deploys production when the repository is connected to a Vercel project.
-- No environment variables are currently required.
+- The contact endpoint reads `RESEND_API_KEY`, which the Resend Marketplace integration adds to every environment automatically. Run `vercel env pull` to copy it into `.env.local` for local development; `npm run dev` serves `/api/contact` too.
+- Optional overrides: `CONTACT_TO` (defaults to the address in `api/contact.js`) and `CONTACT_FROM` (defaults to `Portfolio Contact <onboarding@resend.dev>`).
 - If the production domain changes, update the canonical URL and Open Graph/Twitter URLs in `index.html`, plus `public/robots.txt` and `public/sitemap.xml`.
 
 ## Manual QA checklist
@@ -119,13 +122,15 @@ The site is set up for **Vercel**. `vercel.json` rewrites all routes to `index.h
 - The mobile menu opens, closes, and leaves no layout gaps.
 - Dark/light mode works and survives a refresh.
 - The projects carousel works with arrows, dots, keyboard arrows, and swipe.
+- Swiping the centered project card rotates once and does not open its links.
 - Keyboard focus is visible on links, buttons, and the carousel.
 - The résumé link downloads the PDF.
+- The contact form rejects an invalid email address and delivers a real message.
 - Layout has no horizontal overflow at phone, tablet, and desktop widths.
 
 ## Known limitations
 
-- **The contact form does not send messages.** It validates required fields and displays a confirmation, but no email or API is connected yet.
+- **Contact email is sent from `onboarding@resend.dev` until `jamessederia.dev` is verified in Resend.** Add the DKIM TXT and the `send` / `rsend` CNAME records shown in the Resend dashboard, then set `CONTACT_FROM` to an address on that domain.
 - **Some project data is placeholder content.** Check `src/data/projects.js` for links and imagery that still need real demos or screenshots.
 - **No automated tests.** Linting, the production build, and the manual checklist above are the current safeguards.
 

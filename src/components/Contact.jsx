@@ -4,6 +4,9 @@ import { HiOutlineCheckCircle } from "react-icons/hi";
 import Reveal from "./Reveal";
 import { SOCIAL_LINKS } from "../site.config";
 
+// Kept in sync with the API route's check in /api/contact.js.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const METHODS = [
   {
     id: "email",
@@ -25,13 +28,25 @@ const METHODS = [
   },
 ];
 
-const FIELDS = [
-  { name: "name", label: "Name" },
-  { name: "email", label: "Email" },
-  { name: "message", label: "Message" },
-];
+const FIELDS = ["name", "email", "message"];
 
 const EMPTY_ERRORS = { name: "", email: "", message: "" };
+
+function validate(values) {
+  const nextErrors = { ...EMPTY_ERRORS };
+
+  if (!values.name.trim()) nextErrors.name = "Name is required.";
+
+  if (!values.email.trim()) {
+    nextErrors.email = "Email is required.";
+  } else if (!EMAIL_PATTERN.test(values.email.trim())) {
+    nextErrors.email = "Enter a valid email address.";
+  }
+
+  if (!values.message.trim()) nextErrors.message = "Message is required.";
+
+  return nextErrors;
+}
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -40,35 +55,51 @@ export default function Contact() {
     message: "",
   });
   const [errors, setErrors] = useState(EMPTY_ERRORS);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
     // Clear this field's error as soon as the user starts typing in it.
     setErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
+    setSubmitError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const nextErrors = { ...EMPTY_ERRORS };
-    FIELDS.forEach(({ name, label }) => {
-      if (!form[name].trim()) {
-        nextErrors[name] = `${label} is required.`;
-      }
-    });
-
+    const nextErrors = validate(form);
     if (Object.values(nextErrors).some(Boolean)) {
       setErrors(nextErrors);
-      const firstInvalid = FIELDS.find(({ name }) => nextErrors[name]);
-      document.getElementById(`contact-${firstInvalid.name}`)?.focus();
+      const firstInvalid = FIELDS.find((name) => nextErrors[name]);
+      document.getElementById(`contact-${firstInvalid}`)?.focus();
       return;
     }
 
     setErrors(EMPTY_ERRORS);
-    // TODO: connect to a mail service (Formspree / EmailJS / your API).
-    setSent(true);
+    setSubmitError("");
+    setStatus("sending");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
+        }),
+      });
+
+      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+      setStatus("sent");
+    } catch {
+      setStatus("idle");
+      setSubmitError(
+        "Something went wrong sending your message. Please try again, or email me directly:",
+      );
+    }
   };
 
   return (
@@ -112,7 +143,7 @@ export default function Contact() {
 
           {/* ---- Form ---- */}
           <Reveal delay={120}>
-            {sent ? (
+            {status === "sent" ? (
               <p className="form-status" role="status" aria-live="polite">
                 <HiOutlineCheckCircle size={22} aria-hidden="true" />
                 Thanks, {form.name || "friend"}! Your message is on its way.
@@ -179,8 +210,21 @@ export default function Contact() {
                   )}
                 </div>
 
-                <button className="btn btn--primary" type="submit">
-                  Send message
+                {submitError && (
+                  <p className="form-status form-status--error" role="alert">
+                    {submitError}{" "}
+                    <a href={SOCIAL_LINKS.email.href}>
+                      {SOCIAL_LINKS.email.label}
+                    </a>
+                  </p>
+                )}
+
+                <button
+                  className="btn btn--primary"
+                  type="submit"
+                  disabled={status === "sending"}
+                >
+                  {status === "sending" ? "Sending…" : "Send message"}
                 </button>
               </form>
             )}

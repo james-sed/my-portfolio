@@ -10,6 +10,7 @@ const VISIBLE = 2;
 export default function Projects() {
   const [index, setIndex] = useState(0);
   const pointerStart = useRef(null);
+  const swipeEnd = useRef(0);
   const total = PROJECTS.length;
 
   // Shortest circular distance so navigation wraps around.
@@ -24,18 +25,40 @@ export default function Projects() {
   const go = (d) => goTo(index + d);
 
   const handlePointerDown = (e) => {
-    pointerStart.current = e.clientX;
+    // Arrows and dots own their clicks; don't read their presses as drags.
+    if (e.target.closest?.('button')) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    pointerStart.current = { x: e.clientX, y: e.clientY };
   };
 
   const handlePointerUp = (e) => {
-    if (pointerStart.current === null) return;
-    const dx = e.clientX - pointerStart.current;
-    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    const start = pointerStart.current;
     pointerStart.current = null;
+    if (!start) return;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+
+    // Require a mostly-horizontal gesture so vertical scrolling and taps on
+    // the card still behave normally.
+    if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy)) return;
+
+    swipeEnd.current = Date.now();
+    go(dx < 0 ? 1 : -1);
   };
 
   const handlePointerCancel = () => {
     pointerStart.current = null;
+  };
+
+  // A swipe still ends with a click on the card (or link) it started on. Swallow
+  // that click so it neither snaps the carousel back to the card being dragged
+  // nor follows a link under the finger.
+  const handleClickCapture = (e) => {
+    if (Date.now() - swipeEnd.current > 400) return;
+    swipeEnd.current = 0;
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleKeyDown = (e) => {
@@ -74,6 +97,7 @@ export default function Projects() {
           aria-roledescription="carousel"
           aria-label="Projects"
           onKeyDown={handleKeyDown}
+          onClickCapture={handleClickCapture}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerCancel}
