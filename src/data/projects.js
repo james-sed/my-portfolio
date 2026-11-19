@@ -48,4 +48,13 @@ export const PROJECTS = [
     live: GITHUB_URL,
     repo: "https://github.com/james-sed/EduPath",
   },
+  {
+    title: "Exam Maker",
+    description:
+      "A web-based tool designed to help students create and generate exams quickly and efficiently, with support for various question types and randomized ordering.",
+    image: `${import.meta.env.BASE_URL}exammaker.jpg`,
+    tags: ["Next.js 14", "TypeScript", "Tailwind CSS + shadcn/ui", "Auth.js v5", "Neon + Prisma", "Vercel Blob", "Vitest"],
+    live: GITHUB_URL,
+    repo: "https://github.com/james-sed/exam-maker",
+  },
 ];
