@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import Reveal from "./Reveal";
@@ -23,6 +23,29 @@ export default function Projects() {
 
   const goTo = (i) => setIndex((i + total) % total);
   const go = (d) => goTo(index + d);
+
+  // Warm the browser cache for the neighbouring slides so a next/prev click
+  // paints immediately instead of waiting on a network request and decode.
+  // The Image objects are kept so the fetches survive garbage collection.
+  const preloaded = useRef(new Map());
+
+  useEffect(() => {
+    const preload = (i) => {
+      const project = PROJECTS[((i % total) + total) % total];
+      if (!project) return;
+
+      const { image } = project;
+      if (preloaded.current.has(image)) return;
+
+      const img = new Image();
+      img.decoding = "async";
+      img.src = image;
+      preloaded.current.set(image, img);
+    };
+
+    preload(index + 1);
+    preload(index - 1);
+  }, [index, total]);
 
   const handlePointerDown = (e) => {
     // Arrows and dots own their clicks; don't read their presses as drags.
@@ -147,7 +170,8 @@ export default function Projects() {
                         alt={`Preview of the ${project.title} project`}
                         width="1200"
                         height="750"
-                        loading="lazy"
+                        loading={i === 0 ? "eager" : "lazy"}
+                        fetchPriority={i === 0 ? "high" : "auto"}
                         decoding="async"
                       />
                     </div>
