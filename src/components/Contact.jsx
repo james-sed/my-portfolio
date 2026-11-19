@@ -25,19 +25,48 @@ const METHODS = [
   },
 ];
 
+const FIELDS = [
+  { name: "name", label: "Name" },
+  { name: "email", label: "Email" },
+  { name: "message", label: "Message" },
+];
+
+const EMPTY_ERRORS = { name: "", email: "", message: "" };
+
 export default function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [errors, setErrors] = useState(EMPTY_ERRORS);
   const [sent, setSent] = useState(false);
 
-  const handleChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+    // Clear this field's error as soon as the user starts typing in it.
+    setErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const nextErrors = { ...EMPTY_ERRORS };
+    FIELDS.forEach(({ name, label }) => {
+      if (!form[name].trim()) {
+        nextErrors[name] = `${label} is required.`;
+      }
+    });
+
+    if (Object.values(nextErrors).some(Boolean)) {
+      setErrors(nextErrors);
+      const firstInvalid = FIELDS.find(({ name }) => nextErrors[name]);
+      document.getElementById(`contact-${firstInvalid.name}`)?.focus();
+      return;
+    }
+
+    setErrors(EMPTY_ERRORS);
     // TODO: connect to a mail service (Formspree / EmailJS / your API).
     setSent(true);
   };
@@ -89,8 +118,8 @@ export default function Contact() {
                 Thanks, {form.name || "friend"}! Your message is on its way.
               </p>
             ) : (
-              <form className="contact-form" onSubmit={handleSubmit}>
-                <div className="field">
+              <form className="contact-form" onSubmit={handleSubmit} noValidate>
+                <div className={errors.name ? "field field--invalid" : "field"}>
                   <label htmlFor="contact-name">Name</label>
                   <input
                     id="contact-name"
@@ -99,11 +128,18 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="Jane Doe"
                     autoComplete="name"
+                    aria-invalid={errors.name ? "true" : undefined}
+                    aria-describedby={errors.name ? "contact-name-error" : undefined}
                     required
                   />
+                  {errors.name && (
+                    <p className="field__error" id="contact-name-error">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
 
-                <div className="field">
+                <div className={errors.email ? "field field--invalid" : "field"}>
                   <label htmlFor="contact-email">Email</label>
                   <input
                     id="contact-email"
@@ -113,11 +149,18 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="you@example.com"
                     autoComplete="email"
+                    aria-invalid={errors.email ? "true" : undefined}
+                    aria-describedby={errors.email ? "contact-email-error" : undefined}
                     required
                   />
+                  {errors.email && (
+                    <p className="field__error" id="contact-email-error">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
-                <div className="field">
+                <div className={errors.message ? "field field--invalid" : "field"}>
                   <label htmlFor="contact-message">Message</label>
                   <textarea
                     id="contact-message"
@@ -125,8 +168,15 @@ export default function Contact() {
                     value={form.message}
                     onChange={handleChange}
                     placeholder="Tell me about your project or opportunity…"
+                    aria-invalid={errors.message ? "true" : undefined}
+                    aria-describedby={errors.message ? "contact-message-error" : undefined}
                     required
                   />
+                  {errors.message && (
+                    <p className="field__error" id="contact-message-error">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 <button className="btn btn--primary" type="submit">

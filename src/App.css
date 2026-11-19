@@ -1050,6 +1050,26 @@
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
+/* ---- Validation errors ---- */
+.field--invalid input,
+.field--invalid textarea {
+  border-color: var(--danger);
+}
+
+.field--invalid input:focus,
+.field--invalid textarea:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-ring);
+}
+
+.field__error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 .field textarea {
   min-height: 140px;
   resize: vertical;
