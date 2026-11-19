@@ -5,9 +5,9 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
 
-**Live site:** [my-portfolio-two-hazel-51.vercel.app](https://my-portfolio-two-hazel-51.vercel.app/)
+**Live site:** [https://my-portfolio-jjms.vercel.app/](https://my-portfolio-jjms.vercel.app/)
 
-![Portfolio social preview](public/og-image.png)
+![Portfolio social preview](public/portfolio-preview.jpg)
 
 ## About
 
