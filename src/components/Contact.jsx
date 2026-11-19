@@ -157,7 +157,7 @@ export default function Contact() {
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Jane Doe"
+                    placeholder="your name"
                     autoComplete="name"
                     aria-invalid={errors.name ? "true" : undefined}
                     aria-describedby={errors.name ? "contact-name-error" : undefined}
