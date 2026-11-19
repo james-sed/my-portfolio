@@ -9,6 +9,16 @@ const LINKS = [
   { id: "contact", label: "Contact" },
 ];
 
+// Sections watched by the scrollspy. Skills has no nav link of its own, so it
+// keeps the About link highlighted while it is on screen.
+const SECTION_LINKS = {
+  home: "home",
+  about: "about",
+  skills: "about",
+  projects: "projects",
+  contact: "contact",
+};
+
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
@@ -19,9 +29,9 @@ export default function Navbar() {
 
   // Scrollspy — highlight the section currently in view.
   useEffect(() => {
-    const sections = LINKS.map((l) => document.getElementById(l.id)).filter(
-      Boolean,
-    );
+    const sections = Object.keys(SECTION_LINKS)
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
     if (!sections.length) return undefined;
 
     // Remember the latest entry for every section so one callback can pick a
@@ -35,7 +45,8 @@ export default function Navbar() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 2;
       if (atBottom) {
-        setActive(sections[sections.length - 1].id);
+        const lastSection = sections[sections.length - 1].id;
+        setActive(SECTION_LINKS[lastSection] ?? lastSection);
         return;
       }
 
@@ -55,7 +66,7 @@ export default function Navbar() {
       });
 
       // setActive replaces the previous id, so only one link is ever lit.
-      if (bestId) setActive(bestId);
+      if (bestId) setActive(SECTION_LINKS[bestId] ?? bestId);
     };
 
     const observer = new IntersectionObserver(
@@ -78,9 +89,18 @@ export default function Navbar() {
 
     const updateIndicator = () => {
       if (window.innerWidth <= 860) {
+        // The indicator is desktop-only. Clear the inline geometry from any
+        // previous desktop layout so it cannot take up space in the mobile
+        // menu column.
         indicator.style.opacity = "0";
+        indicator.style.display = "none";
+        indicator.style.width = "";
+        indicator.style.height = "";
+        indicator.style.transform = "";
         return;
       }
+
+      indicator.style.display = "";
 
       const activeEl = nav.querySelector(`a[href="#${active}"]:not(.btn)`);
       if (!activeEl) {
