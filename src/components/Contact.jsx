@@ -55,8 +55,7 @@ export default function Contact() {
             Let's build something together
           </h2>
           <p className="section__lead">
-            Have a project, a role, or just a hello? My inbox is always open —
-            I'll get back to you within a day or two.
+            Have a project, a role, or just a hello? My inbox is always open, and I'll get back to you within a day or two.
           </p>
         </Reveal>
 
