@@ -75,27 +75,31 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 
 ```
 .
-├── index.html            # Entry HTML — SEO/social meta tags, Google Fonts
-├── vite.config.js        # Vite configuration (also serves /api locally)
-├── vercel.json           # Vercel SPA rewrite
 ├── api/contact.js        # Contact form endpoint — validates, then sends via Resend
-├── package.json          # Scripts and dependencies
+├── backup/               # Original JPEGs replaced by the WebP covers (not served)
 ├── public/               # Static files served as-is
-│   ├── projects/         # Project cover art
+│   ├── *.webp            # Six project covers
+│   ├── portfolio-preview.jpg   # Social preview (1200×630)
+│   ├── professional-pic-james.jpg
 │   ├── resume-sederia.pdf
-│   ├── og-image.png      # Social preview image
-│   ├── robots.txt
-│   └── sitemap.xml
-└── src/
-    ├── main.jsx          # App entry — Router + ThemeProvider
-    ├── App.jsx           # Routes: "/" renders Home, all other paths redirect to "/"
-    ├── site.config.js    # Name, email, social links, roles, résumé path
-    ├── pages/Home.jsx    # Composes all sections into one page
-    ├── components/       # Navbar, Hero, About, Skills, Projects, Contact, Footer, Reveal
-    ├── contexts/         # ThemeContext — dark/light mode state
-    ├── data/projects.js  # Project titles, descriptions, images, tags, and links
-    ├── index.css         # Design tokens, base styles, dark-mode surfaces
-    └── App.css           # Component styles
+│   ├── favicon.svg, icon-*.png, apple-touch-icon.png, site.webmanifest
+│   └── robots.txt, sitemap.xml
+├── src/
+│   ├── assets/           # Unreferenced images (not bundled)
+│   ├── components/       # Navbar, Hero, About, Skills, Projects, Contact, Footer, Reveal
+│   ├── contexts/         # ThemeContext — dark/light mode state
+│   ├── data/projects.js  # Project titles, descriptions, images, tags, and links
+│   ├── pages/Home.jsx    # Composes all sections into one page
+│   ├── App.css           # Component styles
+│   ├── App.jsx           # Routes: "/" renders Home, all other paths redirect to "/"
+│   ├── index.css         # Design tokens, base styles, dark-mode surfaces
+│   ├── main.jsx          # App entry — Router + ThemeProvider
+│   └── site.config.js    # Name, email, social links, roles, résumé path
+├── index.html            # Entry HTML — SEO/social meta tags, Google Fonts
+├── package.json          # Scripts and dependencies
+├── .oxlintrc.json        # Linter configuration
+├── vercel.json           # Vercel SPA rewrite
+└── vite.config.js        # Vite configuration (also serves /api locally)
 ```
 
 ## Editing content
