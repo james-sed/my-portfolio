@@ -55,6 +55,6 @@ export const PROJECTS = [
     image: `${import.meta.env.BASE_URL}exammaker.webp`,
     tags: ["Next.js 14", "TypeScript", "Tailwind CSS + shadcn/ui", "Auth.js v5", "Neon + Prisma", "Vercel Blob", "Vitest"],
     live: GITHUB_URL,
-    repo: "https://github.com/james-sed/exam-maker",
+    repo: "https://github.com/james-sed/exammaker",
   },
 ];
