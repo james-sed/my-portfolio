@@ -4,8 +4,31 @@ import { HiOutlineCheckCircle } from "react-icons/hi";
 import Reveal from "./Reveal";
 import { SOCIAL_LINKS } from "../site.config";
 
-// Kept in sync with the API route's check in /api/contact.js.
+// Kept in sync with the API route's checks in /api/contact.js.
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_LENGTH = {
+  name: 120,
+  email: 200,
+  message: 5000,
+};
+
+function formatRetryAfter(retryAfter) {
+  if (!retryAfter) return null;
+  let seconds = Number.parseInt(retryAfter, 10);
+  if (Number.isNaN(seconds)) {
+    const date = Date.parse(retryAfter);
+    if (!Number.isNaN(date)) {
+      seconds = Math.max(0, Math.ceil((date - Date.now()) / 1000));
+    }
+  }
+  if (!Number.isFinite(seconds) || seconds <= 0) return null;
+
+  if (seconds < 60) {
+    return `${seconds} second${seconds === 1 ? "" : "s"}`;
+  }
+  const minutes = Math.ceil(seconds / 60);
+  return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+}
 
 const METHODS = [
   {
@@ -35,15 +58,25 @@ const EMPTY_ERRORS = { name: "", email: "", message: "" };
 function validate(values) {
   const nextErrors = { ...EMPTY_ERRORS };
 
-  if (!values.name.trim()) nextErrors.name = "Name is required.";
+  if (!values.name.trim()) {
+    nextErrors.name = "Name is required.";
+  } else if (values.name.length > MAX_LENGTH.name) {
+    nextErrors.name = `Name must be ${MAX_LENGTH.name} characters or fewer.`;
+  }
 
   if (!values.email.trim()) {
     nextErrors.email = "Email is required.";
+  } else if (values.email.length > MAX_LENGTH.email) {
+    nextErrors.email = `Email must be ${MAX_LENGTH.email} characters or fewer.`;
   } else if (!EMAIL_PATTERN.test(values.email.trim())) {
     nextErrors.email = "Enter a valid email address.";
   }
 
-  if (!values.message.trim()) nextErrors.message = "Message is required.";
+  if (!values.message.trim()) {
+    nextErrors.message = "Message is required.";
+  } else if (values.message.length > MAX_LENGTH.message) {
+    nextErrors.message = `Message must be ${MAX_LENGTH.message} characters or fewer.`;
+  }
 
   return nextErrors;
 }
@@ -58,14 +91,14 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState(EMPTY_ERRORS);
   const [status, setStatus] = useState("idle"); // idle | sending | sent
-  const [submitError, setSubmitError] = useState("");
+  const [submitError, setSubmitError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
     // Clear this field's error as soon as the user starts typing in it.
     setErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
-    setSubmitError("");
+    setSubmitError(null);
   };
 
   const handleSubmit = async (e) => {
@@ -80,7 +113,7 @@ export default function Contact() {
     }
 
     setErrors(EMPTY_ERRORS);
-    setSubmitError("");
+    setSubmitError(null);
     setStatus("sending");
 
     try {
@@ -95,13 +128,54 @@ export default function Contact() {
         }),
       });
 
-      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        setStatus("idle");
+
+        if (response.status === 429) {
+          const waitTime = formatRetryAfter(response.headers.get("Retry-After"));
+          setSubmitError({
+            message: waitTime
+              ? `Too many messages. Please try again in ${waitTime}.`
+              : data?.error || "Too many messages. Please try again later.",
+            showEmailLink: false,
+          });
+          return;
+        }
+
+        if (response.status === 413) {
+          setSubmitError({
+            message: data?.error || "Request is too large.",
+            showEmailLink: false,
+          });
+          return;
+        }
+
+        if (response.status === 400) {
+          setSubmitError({
+            message: data?.error || "Invalid request body.",
+            showEmailLink: false,
+          });
+          return;
+        }
+
+        setSubmitError({
+          message: data?.error
+            ? `${data.error} Please try again, or email me directly:`
+            : "Something went wrong sending your message. Please try again, or email me directly:",
+          showEmailLink: true,
+        });
+        return;
+      }
+
       setStatus("sent");
     } catch {
       setStatus("idle");
-      setSubmitError(
-        "Something went wrong sending your message. Please try again, or email me directly:",
-      );
+      setSubmitError({
+        message:
+          "Something went wrong sending your message. Please try again, or email me directly:",
+        showEmailLink: true,
+      });
     }
   };
 
@@ -176,6 +250,7 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="your name"
                     autoComplete="name"
+                    maxLength={MAX_LENGTH.name}
                     aria-invalid={errors.name ? "true" : undefined}
                     aria-describedby={errors.name ? "contact-name-error" : undefined}
                     required
@@ -197,6 +272,7 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="you@example.com"
                     autoComplete="email"
+                    maxLength={MAX_LENGTH.email}
                     aria-invalid={errors.email ? "true" : undefined}
                     aria-describedby={errors.email ? "contact-email-error" : undefined}
                     required
@@ -216,6 +292,7 @@ export default function Contact() {
                     value={form.message}
                     onChange={handleChange}
                     placeholder="Tell me about your project or opportunity…"
+                    maxLength={MAX_LENGTH.message}
                     aria-invalid={errors.message ? "true" : undefined}
                     aria-describedby={errors.message ? "contact-message-error" : undefined}
                     required
@@ -229,10 +306,15 @@ export default function Contact() {
 
                 {submitError && (
                   <p className="form-status form-status--error" role="alert">
-                    {submitError}{" "}
-                    <a href={SOCIAL_LINKS.email.href}>
-                      {SOCIAL_LINKS.email.label}
-                    </a>
+                    {submitError.message || submitError}
+                    {submitError.showEmailLink && (
+                      <>
+                        {" "}
+                        <a href={SOCIAL_LINKS.email.href}>
+                          {SOCIAL_LINKS.email.label}
+                        </a>
+                      </>
+                    )}
                   </p>
                 )}
 
