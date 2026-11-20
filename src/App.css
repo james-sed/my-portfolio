@@ -1020,6 +1020,16 @@
   gap: 0.4rem;
 }
 
+/* Honeypot: stays in the layout tree so simple bots still fill it, but is
+   moved off-screen and collapsed so people never see it. */
+.field--hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .field label {
   font-size: 0.85rem;
   font-weight: 600;

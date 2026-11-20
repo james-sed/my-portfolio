@@ -53,6 +53,8 @@ export default function Contact() {
     name: "",
     email: "",
     message: "",
+    // Honeypot. Real visitors never see or fill this field; bots do.
+    company_website: "",
   });
   const [errors, setErrors] = useState(EMPTY_ERRORS);
   const [status, setStatus] = useState("idle"); // idle | sending | sent
@@ -89,6 +91,7 @@ export default function Contact() {
           name: form.name.trim(),
           email: form.email.trim(),
           message: form.message.trim(),
+          company_website: form.company_website,
         }),
       });
 
@@ -150,6 +153,20 @@ export default function Contact() {
               </p>
             ) : (
               <form className="contact-form" onSubmit={handleSubmit} noValidate>
+                {/* Honeypot: off-screen and skipped by keyboard and screen
+                    readers, but bots that fill every input will populate it. */}
+                <div className="field field--hp" aria-hidden="true">
+                  <label htmlFor="contact-company-website">Company website</label>
+                  <input
+                    id="contact-company-website"
+                    name="company_website"
+                    value={form.company_website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className={errors.name ? "field field--invalid" : "field"}>
                   <label htmlFor="contact-name">Name</label>
                   <input

@@ -22,7 +22,7 @@ This is my personal portfolio website: a fast, single-page introduction to who I
 - **Skills section** — a grid of the languages, tools, and platforms I work with
 - **Projects carousel** — an interactive 3D coverflow with tech tags, demo/code links, arrow and dot controls, keyboard navigation, and swipe support
 - **Scroll-reveal animations** — sections fade in as you scroll and are disabled for `prefers-reduced-motion`
-- **Contact section** — direct email, GitHub, and LinkedIn links plus a required-field form that emails me through [Resend](https://resend.com)
+- **Contact section** — direct email, GitHub, and LinkedIn links plus a required-field form that emails me through [Resend](https://resend.com). The endpoint refuses cross-site posts, silently drops honeypot submissions, and rate limits per IP.
 - **Résumé download** — one-click PDF download
 - **Accessibility** — skip link, semantic landmarks, ARIA labels, and visible keyboard focus styles
 - **SEO & social sharing** — Open Graph and Twitter cards with a canonical URL, sitemap, and robots file
@@ -103,7 +103,7 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 - **Personal details:** update `src/site.config.js` — name, email, GitHub/LinkedIn URLs, roles, and the résumé path.
 - **Projects:** update `src/data/projects.js` — title, description, image, tags, live demo, and repository URL. Replace the placeholder links/images called out in the file's comments.
 - **Résumé:** replace `public/resume-sederia.pdf` (keep the filename or update `RESUME_URL` in `src/site.config.js`).
-- **Images:** project screenshots live in `public/` and `public/projects/`. Update `og-image.png` if the social preview should change.
+- **Images:** project screenshots live in `public/` as WebP files. The social preview is `public/portfolio-preview.jpg`, cropped to the 1200×630 box declared in `index.html` — keep those two in sync if you replace it.
 - **Colors and spacing:** edit the design tokens at the top of `src/index.css`.
 
 ## Deployment
@@ -113,6 +113,7 @@ The site is set up for **Vercel**. `vercel.json` rewrites all routes to `index.h
 - Pushing to `main` deploys production when the repository is connected to a Vercel project.
 - The contact endpoint reads `RESEND_API_KEY`, which the Resend Marketplace integration adds to every environment automatically. Run `vercel env pull` to copy it into `.env.local` for local development; `npm run dev` serves `/api/contact` too.
 - Optional overrides: `CONTACT_TO` (defaults to the address in `api/contact.js`) and `CONTACT_FROM` (defaults to `Portfolio Contact <onboarding@resend.dev>`).
+- Abuse protection: `api/contact.js` caps each IP at 5 submissions per 10 minutes and rejects cross-site or honeypot-filled posts. A Vercel Firewall rule rate limits `/api/contact` to 10 requests per minute per IP; check it with `vercel firewall rules list`.
 - If the production domain changes, update the canonical URL and Open Graph/Twitter URLs in `index.html`, plus `public/robots.txt` and `public/sitemap.xml`.
 
 ## Manual QA checklist
