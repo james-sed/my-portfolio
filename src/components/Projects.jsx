@@ -24,8 +24,9 @@ export default function Projects() {
   const goTo = (i) => setIndex((i + total) % total);
   const go = (d) => goTo(index + d);
 
-  // Warm the browser cache for the neighbouring slides so a next/prev click
-  // paints immediately instead of waiting on a network request and decode.
+  // Warm the browser cache for the slide that is about to enter the visible
+  // band. Everything nearer (|offset| <= VISIBLE) is already on screen and
+  // loading, so preloading those would only duplicate requests.
   // The Image objects are kept so the fetches survive garbage collection.
   const preloaded = useRef(new Map());
 
@@ -43,8 +44,8 @@ export default function Projects() {
       preloaded.current.set(image, img);
     };
 
-    preload(index + 1);
-    preload(index - 1);
+    preload(index + VISIBLE + 1);
+    preload(index - (VISIBLE + 1));
   }, [index, total]);
 
   const handlePointerDown = (e) => {
@@ -76,9 +77,11 @@ export default function Projects() {
 
   // A swipe still ends with a click on the card (or link) it started on. Swallow
   // that click so it neither snaps the carousel back to the card being dragged
-  // nor follows a link under the finger.
+  // nor follows a link under the finger. Arrows and dots own their clicks, so
+  // they stay responsive right after a swipe.
   const handleClickCapture = (e) => {
     if (Date.now() - swipeEnd.current > 400) return;
+    if (e.target.closest?.("button")) return;
     swipeEnd.current = 0;
     e.preventDefault();
     e.stopPropagation();
@@ -124,6 +127,7 @@ export default function Projects() {
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerCancel}
+          onPointerLeave={handlePointerCancel}
         >
           <button
             type="button"
@@ -170,8 +174,8 @@ export default function Projects() {
                         alt={`Preview of the ${project.title} project`}
                         width="1200"
                         height="750"
-                        loading={i === 0 ? "eager" : "lazy"}
-                        fetchPriority={i === 0 ? "high" : "auto"}
+                        loading={isActive ? "eager" : "lazy"}
+                        fetchPriority={isActive ? "high" : "auto"}
                         decoding="async"
                       />
                     </div>

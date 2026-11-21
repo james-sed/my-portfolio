@@ -24,6 +24,14 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
+
+    // Keep the browser UI colour in step with the in-page theme, not just the
+    // OS preference. index.html applies the same value before first paint.
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute("content", theme === "dark" ? "#070d0b" : "#f5faf7");
+    }
+
     try {
       localStorage.setItem("theme", theme);
     } catch {

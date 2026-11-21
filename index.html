@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ── Primary SEO ─────────────────────────────────────────────── -->
-  <title>James-Sederia.dev</title>
+  <title>James Sederia | Front-end Developer</title>
   <meta name="description"
     content="James Sederia is a front-end developer at AWS SBG JRU building clean, accessible, high-performance web interfaces with HTML, CSS, JavaScript, and React. Available for work and freelance projects." />
   <meta name="author" content="James Sederia" />
@@ -22,9 +22,10 @@
   <link rel="manifest" href="/site.webmanifest" />
 
   <!-- ── Theme colour for the browser UI ─────────────────────────── -->
-  <meta name="theme-color" content="#f5faf7" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#070d0b" media="(prefers-color-scheme: dark)" />
-  <meta name="color-scheme" content="dark light" />
+  <!-- A single tag, updated by the pre-paint script and ThemeProvider so it
+       follows the saved theme rather than only the OS preference.
+       `color-scheme` is set per theme in index.css. -->
+  <meta name="theme-color" content="#f5faf7" />
 
   <!-- ── Open Graph (Facebook, LinkedIn, Discord) ────────────────── -->
   <meta property="og:type" content="website" />
@@ -65,6 +66,13 @@
               : "light";
         if (theme === "dark") {
           document.documentElement.classList.add("dark");
+        }
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+          meta.setAttribute(
+            "content",
+            theme === "dark" ? "#070d0b" : "#f5faf7",
+          );
         }
       } catch (e) { }
     })();

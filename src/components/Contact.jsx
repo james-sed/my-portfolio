@@ -12,6 +12,14 @@ const MAX_LENGTH = {
   message: 5000,
 };
 
+// Friendly rewrites of the API's 400 messages. The server's wording is for
+// operators, so it is mapped here instead of being shown verbatim.
+const FIELD_ERRORS = {
+  "All fields are required.": "Please fill in your name, email, and message.",
+  "Enter a valid email address.": "Enter a valid email address.",
+  "Message is too long.": "That message is too long. Please shorten it.",
+};
+
 function formatRetryAfter(retryAfter) {
   if (!retryAfter) return null;
   let seconds = Number.parseInt(retryAfter, 10);
@@ -137,7 +145,7 @@ export default function Contact() {
           setSubmitError({
             message: waitTime
               ? `Too many messages. Please try again in ${waitTime}.`
-              : data?.error || "Too many messages. Please try again later.",
+              : "Too many messages. Please try again later.",
             showEmailLink: false,
           });
           return;
@@ -145,7 +153,7 @@ export default function Contact() {
 
         if (response.status === 413) {
           setSubmitError({
-            message: data?.error || "Request is too large.",
+            message: "That message is too large to send. Please shorten it.",
             showEmailLink: false,
           });
           return;
@@ -153,16 +161,22 @@ export default function Contact() {
 
         if (response.status === 400) {
           setSubmitError({
-            message: data?.error || "Invalid request body.",
-            showEmailLink: false,
+            message:
+              FIELD_ERRORS[data?.error] ??
+              "Please check your details and try again.",
+            showEmailLink: true,
           });
           return;
         }
 
+        // Never echo 403/5xx text: it is written for operators and can expose
+        // configuration details ("Email is not configured."). Keep the copy
+        // generic and offer the direct address instead.
         setSubmitError({
-          message: data?.error
-            ? `${data.error} Please try again, or email me directly:`
-            : "Something went wrong sending your message. Please try again, or email me directly:",
+          message:
+            response.status >= 500
+              ? "The form is temporarily unavailable. Please try again in a moment, or email me directly:"
+              : "That request couldn't be completed. Please email me directly:",
           showEmailLink: true,
         });
         return;

@@ -98,7 +98,7 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 ├── index.html            # Entry HTML — SEO/social meta tags, Google Fonts
 ├── package.json          # Scripts and dependencies
 ├── .oxlintrc.json        # Linter configuration
-├── vercel.json           # Vercel SPA rewrite
+├── vercel.json           # Vercel config (no SPA catch-all; unknown paths 404)
 └── vite.config.js        # Vite configuration (also serves /api locally)
 ```
 
@@ -112,7 +112,7 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 
 ## Deployment
 
-The site is set up for **Vercel**. `vercel.json` rewrites all routes to `index.html` so client-side routing works on refresh and direct links.
+The site is set up for **Vercel**. There is deliberately no catch-all rewrite: the app only serves `/` (all in-page navigation uses hashes), so unknown paths and missing assets return a real 404 instead of a 200 page of HTML. If you add client-side routes later, restore a rewrite in `vercel.json`.
 
 - Pushing to `main` deploys production when the repository is connected to a Vercel project.
 - The contact endpoint reads `RESEND_API_KEY`, which the Resend Marketplace integration adds to every environment automatically. Run `vercel env pull` to copy it into `.env.local` for local development; `npm run dev` serves `/api/contact` too.

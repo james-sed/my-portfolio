@@ -10,9 +10,10 @@ const NAV = [
 ];
 
 const SOCIALS = [
-  { id: "github", Icon: FaGithub, label: "GitHub", ...SOCIAL_LINKS.github },
-  { id: "linkedin", Icon: FaLinkedinIn, label: "LinkedIn", ...SOCIAL_LINKS.linkedin },
-  { id: "email", Icon: FaEnvelope, label: "Email", ...SOCIAL_LINKS.email },
+  { id: "github", Icon: FaGithub, label: "GitHub", external: true, ...SOCIAL_LINKS.github },
+  { id: "linkedin", Icon: FaLinkedinIn, label: "LinkedIn", external: true, ...SOCIAL_LINKS.linkedin },
+  // mailto: must stay in this tab; target="_blank" leaves an empty tab behind.
+  { id: "email", Icon: FaEnvelope, label: "Email", external: false, ...SOCIAL_LINKS.email },
 ];
 
 export default function Footer() {
@@ -36,12 +37,12 @@ export default function Footer() {
           </nav>
 
           <div className="footer__socials">
-            {SOCIALS.map(({ id, href, Icon, label }) => (
+            {SOCIALS.map(({ id, href, Icon, label, external }) => (
               <a
                 key={id}
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
                 aria-label={label}
               >
                 <Icon size={19} aria-hidden="true" />
