@@ -1,37 +1,26 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-const ThemeContext = createContext(undefined);
+import { useEffect, useRef, useState } from "react";
+import {
+  ThemeContext,
+  applyTheme,
+  getStoredTheme,
+  getSystemTheme,
+} from "./theme-context";
 
 function getInitialTheme() {
-  try {
-    const stored = localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") {
-      return stored;
-    }
-  } catch {
-    // Storage can be blocked (privacy mode, embedded contexts); fall back to
-    // the system preference.
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  return getStoredTheme() ?? getSystemTheme();
 }
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(getInitialTheme);
+  // Once the visitor picks a theme, stop following the OS.
+  const chosen = useRef(getStoredTheme() !== null);
 
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
+    applyTheme(theme);
 
-    // Keep the browser UI colour in step with the in-page theme, not just the
-    // OS preference. index.html applies the same value before first paint.
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute("content", theme === "dark" ? "#070d0b" : "#f5faf7");
-    }
-
+    // Only persist an explicit choice. Saving the initial OS-derived theme
+    // would pin it forever and stop the page from following the system.
+    if (!chosen.current) return;
     try {
       localStorage.setItem("theme", theme);
     } catch {
@@ -39,20 +28,24 @@ export function ThemeProvider({ children }) {
     }
   }, [theme]);
 
-  const toggleTheme = () =>
+  // Follow live OS theme changes until the visitor makes a choice.
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = (event) => {
+      if (!chosen.current) setTheme(event.matches ? "dark" : "light");
+    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  const toggleTheme = () => {
+    chosen.current = true;
     setTheme((t) => (t === "dark" ? "light" : "dark"));
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (ctx === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return ctx;
 }

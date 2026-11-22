@@ -3,14 +3,10 @@ import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import Reveal from "./Reveal";
 import { SOCIAL_LINKS } from "../site.config";
+import { CONTACT_LIMITS, EMAIL_PATTERN } from "../../shared/contact-limits.js";
 
-// Kept in sync with the API route's checks in /api/contact.js.
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_LENGTH = {
-  name: 120,
-  email: 200,
-  message: 5000,
-};
+// Shared with /api/contact.js so the two sides cannot drift apart.
+const MAX_LENGTH = CONTACT_LIMITS;
 
 // Friendly rewrites of the API's 400 messages. The server's wording is for
 // operators, so it is mapped here instead of being shown verbatim.
@@ -95,7 +91,7 @@ export default function Contact() {
     email: "",
     message: "",
     // Honeypot. Real visitors never see or fill this field; bots do.
-    company_website: "",
+    hp_website: "",
   });
   const [errors, setErrors] = useState(EMPTY_ERRORS);
   const [status, setStatus] = useState("idle"); // idle | sending | sent
@@ -132,7 +128,7 @@ export default function Contact() {
           name: form.name.trim(),
           email: form.email.trim(),
           message: form.message.trim(),
-          company_website: form.company_website,
+          hp_website: form.hp_website,
         }),
       });
 
@@ -210,6 +206,19 @@ export default function Contact() {
           </p>
         </Reveal>
 
+        {/* Persistent live region: it exists before the text changes, so
+            screen readers reliably announce the result. */}
+        <p
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {status === "sent"
+            ? `Thanks, ${form.name || "friend"}! Your message is on its way.`
+            : ""}
+        </p>
+
         <div className="contact-grid">
           {/* ---- Direct methods ---- */}
           <Reveal className="contact-methods">
@@ -235,23 +244,28 @@ export default function Contact() {
           {/* ---- Form ---- */}
           <Reveal delay={120}>
             {status === "sent" ? (
-              <p className="form-status" role="status" aria-live="polite">
+              <p className="form-status">
                 <HiOutlineCheckCircle size={22} aria-hidden="true" />
                 Thanks, {form.name || "friend"}! Your message is on its way.
               </p>
             ) : (
               <form className="contact-form" onSubmit={handleSubmit} noValidate>
                 {/* Honeypot: off-screen and skipped by keyboard and screen
-                    readers, but bots that fill every input will populate it. */}
+                    readers, but bots that fill every input will populate it.
+                    The label avoids profile keywords and the data-* attributes
+                    tell password managers not to autofill it. */}
                 <div className="field field--hp" aria-hidden="true">
-                  <label htmlFor="contact-company-website">Company website</label>
+                  <label htmlFor="contact-hp">Leave this field empty</label>
                   <input
-                    id="contact-company-website"
-                    name="company_website"
-                    value={form.company_website}
+                    id="contact-hp"
+                    name="hp_website"
+                    value={form.hp_website}
                     onChange={handleChange}
                     tabIndex={-1}
                     autoComplete="off"
+                    data-lpignore="true"
+                    data-1p-ignore=""
+                    data-bwignore="true"
                   />
                 </div>
 
@@ -308,12 +322,32 @@ export default function Contact() {
                     placeholder="Tell me about your project or opportunity…"
                     maxLength={MAX_LENGTH.message}
                     aria-invalid={errors.message ? "true" : undefined}
-                    aria-describedby={errors.message ? "contact-message-error" : undefined}
+                    aria-describedby={
+                      errors.message
+                        ? "contact-message-error"
+                        : form.message.length >= MAX_LENGTH.message - 250
+                          ? "contact-message-count"
+                          : undefined
+                    }
                     required
                   />
                   {errors.message && (
                     <p className="field__error" id="contact-message-error">
                       {errors.message}
+                    </p>
+                  )}
+                  {form.message.length >= MAX_LENGTH.message - 250 && (
+                    <p
+                      className={
+                        form.message.length >= MAX_LENGTH.message
+                          ? "field__counter field__counter--limit"
+                          : "field__counter"
+                      }
+                      id="contact-message-count"
+                    >
+                      {form.message.length >= MAX_LENGTH.message
+                        ? `Message limit reached (${MAX_LENGTH.message.toLocaleString()} characters). Text beyond the limit was not added.`
+                        : `${form.message.length.toLocaleString()} / ${MAX_LENGTH.message.toLocaleString()} characters`}
                     </p>
                   )}
                 </div>

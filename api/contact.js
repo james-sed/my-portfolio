@@ -7,10 +7,11 @@
 // per-IP submissions are capped, the body size is bounded, and a honeypot
 // field silently drops form-filling bots.
 
-const RESEND_ENDPOINT = "https://api.resend.com/emails";
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { CONTACT_LIMITS, EMAIL_PATTERN } from "../shared/contact-limits.js";
 
-const MAX = { name: 120, email: 200, message: 5000 };
+const RESEND_ENDPOINT = "https://api.resend.com/emails";
+
+const MAX = CONTACT_LIMITS;
 
 const MAX_BODY_BYTES = 16 * 1024;
 
@@ -80,17 +81,31 @@ function isCrossSite(req) {
   return site === "cross-site";
 }
 
-function isRateLimited(key) {
+/**
+ * Read-only check. Only accepted messages are recorded, so a malformed or
+ * honeypot submission does not use up a real visitor's budget.
+ */
+function rateLimitFor(key) {
   const now = Date.now();
   const recent = (submissions.get(key) || []).filter(
     (time) => now - time < RATE_LIMIT.windowMs,
   );
+  submissions.set(key, recent);
 
-  if (recent.length >= RATE_LIMIT.max) {
-    submissions.set(key, recent);
-    return true;
+  if (recent.length < RATE_LIMIT.max) {
+    return { limited: false, recent, now };
   }
 
+  // Report the time until the oldest entry leaves the window rather than the
+  // whole window, so the client never asks for a longer wait than necessary.
+  const retryAfter = Math.max(
+    1,
+    Math.ceil((recent[0] + RATE_LIMIT.windowMs - now) / 1000),
+  );
+  return { limited: true, retryAfter, recent, now };
+}
+
+function recordSubmission(key, recent, now) {
   recent.push(now);
   submissions.set(key, recent);
 
@@ -102,8 +117,6 @@ function isRateLimited(key) {
       }
     }
   }
-
-  return false;
 }
 
 function escapeHtml(value) {
@@ -132,8 +145,9 @@ export default async function handler(req, res) {
 
   const ip = clientIp(req);
 
-  if (isRateLimited(ip)) {
-    res.setHeader("Retry-After", String(Math.ceil(RATE_LIMIT.windowMs / 1000)));
+  const limit = rateLimitFor(ip);
+  if (limit.limited) {
+    res.setHeader("Retry-After", String(limit.retryAfter));
     return sendJson(res, 429, {
       error: "Too many messages. Please try again later.",
     });
@@ -161,8 +175,11 @@ export default async function handler(req, res) {
   }
 
   // Honeypot: hidden from people, attractive to bots that fill every input.
-  // Answer 200 so they do not retry, but send nothing.
-  if (String(body?.company_website ?? "").trim()) {
+  // Answer 200 so they do not retry, but send nothing. The legacy field name
+  // is still checked so an old cached bundle stays covered.
+  if (
+    String(body?.hp_website ?? body?.company_website ?? "").trim()
+  ) {
     console.warn("Contact form honeypot triggered from", ip);
     return sendJson(res, 200, { ok: true });
   }
@@ -184,6 +201,9 @@ export default async function handler(req, res) {
   ) {
     return sendJson(res, 400, { error: "Message is too long." });
   }
+
+  // The message is valid and about to be sent, so it counts against the budget.
+  recordSubmission(ip, limit.recent, limit.now);
 
   const safeName = singleLine(name);
 

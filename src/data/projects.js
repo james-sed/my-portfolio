@@ -1,7 +1,7 @@
 import { GITHUB_URL } from "../site.config";
 
-// TODO: replace the placeholder `live` / `repo` URLs and the cover images
-// with your real project links and screenshots.
+// `live: GITHUB_URL` means the project has no live demo yet; the card hides
+// the "Live demo" button in that case. Covers live in public/ as WebP files.
 export const PROJECTS = [
   {
     title: "AWS SBG JRU Website",

@@ -129,6 +129,12 @@ export default function Projects() {
           onPointerCancel={handlePointerCancel}
           onPointerLeave={handlePointerCancel}
         >
+          {/* Announce the new slide to screen readers; the cards themselves
+              are aria-hidden when they are not active. */}
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            Project {index + 1} of {total}: {PROJECTS[index].title}
+          </p>
+
           <button
             type="button"
             className="projects-carousel__nav projects-carousel__nav--prev"

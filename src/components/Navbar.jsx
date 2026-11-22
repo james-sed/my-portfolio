@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { HiMenu, HiMoon, HiSun, HiX } from "react-icons/hi";
-import { useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../contexts/theme-context";
 
 const LINKS = [
   { id: "home", label: "Home" },
@@ -134,14 +134,58 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", updateIndicator);
   }, [active]);
 
-  // Escape closes the mobile menu.
+  // Escape closes the mobile menu and returns focus to the toggle.
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // While the menu is open: move focus into the panel, keep Tab inside it, and
+  // make the rest of the page inert so keyboard and screen-reader users cannot
+  // reach content hidden behind the menu.
+  useEffect(() => {
+    if (!open) return undefined;
+    const panel = navRef.current;
+    const toggle = toggleRef.current;
+    if (!panel) return undefined;
+
+    const focusables = () =>
+      [toggle, ...panel.querySelectorAll("a, button")].filter(Boolean);
+
+    panel.querySelector("a")?.focus();
+
+    const onKey = (e) => {
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    const main = document.getElementById("main");
+    const footer = document.querySelector("footer");
+    main?.setAttribute("inert", "");
+    footer?.setAttribute("inert", "");
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      main?.removeAttribute("inert");
+      footer?.removeAttribute("inert");
+    };
   }, [open]);
 
   // A click/tap outside the panel (or the toggle) closes the mobile menu.

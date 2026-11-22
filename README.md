@@ -77,6 +77,7 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 .
 ├── api/contact.js        # Contact form endpoint — validates, then sends via Resend
 ├── backup/               # Original JPEGs replaced by the WebP covers (not served)
+├── shared/contact-limits.js  # Contact rules (field limits, email pattern) shared by app + API
 ├── public/               # Static files served as-is
 │   ├── *.webp            # Six project covers
 │   ├── portfolio-preview.jpg   # Social preview (1200×630)
@@ -87,7 +88,7 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 ├── src/
 │   ├── assets/           # Unreferenced images (not bundled)
 │   ├── components/       # Navbar, Hero, About, Skills, Projects, Contact, Footer, Reveal
-│   ├── contexts/         # ThemeContext — dark/light mode state
+│   ├── contexts/         # ThemeProvider + theme-context (state, hook, OS-follow)
 │   ├── data/projects.js  # Project titles, descriptions, images, tags, and links
 │   ├── pages/Home.jsx    # Composes all sections into one page
 │   ├── App.css           # Component styles
@@ -105,7 +106,8 @@ There is no automated test suite yet. Before shipping, run `npm run lint` and `n
 ## Editing content
 
 - **Personal details:** update `src/site.config.js` — name, email, GitHub/LinkedIn URLs, roles, and the résumé path.
-- **Projects:** update `src/data/projects.js` — title, description, image, tags, live demo, and repository URL. Replace the placeholder links/images called out in the file's comments.
+- **Projects:** update `src/data/projects.js` — title, description, image, tags, live demo, and repository URL. A `live` value equal to `GITHUB_URL` hides the "Live demo" button.
+- **Contact rules:** `shared/contact-limits.js` holds the field limits and email pattern; both the form and `api/contact.js` import it, so edit it once.
 - **Résumé:** replace `public/resume-sederia.pdf` (keep the filename or update `RESUME_URL` in `src/site.config.js`).
 - **Images:** project screenshots live in `public/` as WebP files. The social preview is `public/portfolio-preview.jpg`, cropped to the 1200×630 box declared in `index.html` — keep those two in sync if you replace it.
 - **Colors and spacing:** edit the design tokens at the top of `src/index.css`.
@@ -136,7 +138,7 @@ The site is set up for **Vercel**. There is deliberately no catch-all rewrite: t
 ## Known limitations
 
 - **Contact email is sent from `onboarding@resend.dev` until `jamessederia.dev` is verified in Resend.** Add the DKIM TXT and the `send` / `rsend` CNAME records shown in the Resend dashboard, then set `CONTACT_FROM` to an address on that domain.
-- **Some project data is placeholder content.** Check `src/data/projects.js` for links and imagery that still need real demos or screenshots.
+- **Four projects have no live demo yet.** Their `live` value is `GITHUB_URL`, so the card hides the button. Replace it in `src/data/projects.js` once each one is deployed.
 - **No automated tests.** Linting, the production build, and the manual checklist above are the current safeguards.
 
 ## Contact

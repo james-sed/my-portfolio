@@ -5,7 +5,7 @@ export const NAME = "James Sederia";
 
 export const EMAIL = "jjsederia08@gmail.com";
 
-// TODO: point these at real profile/repo URLs.
+// Profile and repository links — update here if they ever change.
 export const GITHUB_URL = "https://github.com/james-sed";
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/james-sederia-4b87383a8";

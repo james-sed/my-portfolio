@@ -631,6 +631,9 @@
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  /* Horizontal drags belong to the swipe handler; vertical panning and pinch
+     zoom stay with the browser. */
+  touch-action: pan-y pinch-zoom;
 }
 
 .projects-carousel:focus-visible {
@@ -681,6 +684,9 @@
     opacity 0.5s ease-out,
     border-color 0.35s var(--ease);
   pointer-events: auto;
+  /* Dragging the carousel must not highlight the card copy. */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .project-card.is-active {
@@ -1079,6 +1085,23 @@
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.4;
+}
+
+/* Shown only as the message nears its limit, so the cap never truncates a
+   paste without explanation. */
+.field__counter {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.field__counter--limit {
+  color: var(--danger);
+  font-weight: 500;
+  text-align: left;
 }
 
 .field textarea {
