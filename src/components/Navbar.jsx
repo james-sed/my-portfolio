@@ -153,17 +153,21 @@ export default function Navbar() {
   useEffect(() => {
     if (!open) return undefined;
     const panel = navRef.current;
-    const toggle = toggleRef.current;
     if (!panel) return undefined;
 
     const focusables = () =>
-      [toggle, ...panel.querySelectorAll("a, button")].filter(Boolean);
+      [...panel.querySelectorAll("a, button")].filter(
+        (el) => !el.hasAttribute("disabled") && el.offsetParent !== null,
+      );
 
-    panel.querySelector("a")?.focus();
+    const initialFocus =
+      panel.querySelector(".navbar__close") || panel.querySelector("a");
+    initialFocus?.focus();
 
     const onKey = (e) => {
       if (e.key !== "Tab") return;
       const items = focusables();
+      if (!items.length) return;
       const first = items[0];
       const last = items[items.length - 1];
       if (e.shiftKey && document.activeElement === first) {
@@ -259,57 +263,80 @@ export default function Navbar() {
           )}
         </button>
 
+        {/* Dimmed backdrop behind floating card */}
+        <div
+          className={`navbar__backdrop${open ? " is-open" : ""}`}
+          onClick={close}
+          aria-hidden="true"
+        />
+
         <nav
           ref={navRef}
           id="primary-nav"
           className={`navbar__nav${open ? " is-open" : ""}`}
           aria-label="Primary"
         >
+          {/* Header with close (X) button — mobile only */}
+          <div className="navbar__menu-header">
+            <button
+              type="button"
+              className="navbar__close"
+              onClick={close}
+              aria-label="Close menu"
+            >
+              <HiX size={20} aria-hidden="true" />
+            </button>
+          </div>
+
           <span
             ref={indicatorRef}
             className="navbar__indicator"
             aria-hidden="true"
           />
 
-          {LINKS.map(({ id, label }, i) => (
+          <div className="navbar__links">
+            {LINKS.map(({ id, label }, i) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={[active === id ? "is-active" : "", "nav-enter"]
+                  .filter(Boolean)
+                  .join(" ")}
+                aria-current={active === id ? "page" : undefined}
+                onClick={close}
+                style={{ "--enter-d": `${0.1 + i * 0.05}s` }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+
+          <div className="navbar__divider" role="separator" aria-hidden="true" />
+
+          <div className="navbar__actions">
             <a
-              key={id}
-              href={`#${id}`}
-              className={[active === id ? "is-active" : "", "nav-enter"]
-                .filter(Boolean)
-                .join(" ")}
-              aria-current={active === id ? "page" : undefined}
+              className="btn btn--primary navbar__cta nav-enter"
+              href="#contact"
               onClick={close}
-              style={{ "--enter-d": `${0.1 + i * 0.05}s` }}
+              style={{ "--enter-d": "0.3s" }}
             >
-              {label}
+              Hire me
             </a>
-          ))}
 
-          <a
-            className="btn btn--primary navbar__cta nav-enter"
-            href="#contact"
-            onClick={close}
-            style={{ "--enter-d": "0.3s" }}
-          >
-            Hire me
-          </a>
-
-          <button
-            className="theme-toggle nav-enter"
-            type="button"
-            onClick={toggleTheme}
-            style={{ "--enter-d": "0.35s" }}
-            aria-label={
-              theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-            }
-          >
-            {theme === "dark" ? (
-              <HiSun size={20} aria-hidden="true" />
-            ) : (
-              <HiMoon size={20} aria-hidden="true" />
-            )}
-          </button>
+            <button
+              className="theme-toggle nav-enter"
+              type="button"
+              onClick={toggleTheme}
+              style={{ "--enter-d": "0.35s" }}
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <HiSun size={20} aria-hidden="true" />
+              ) : (
+                <HiMoon size={20} aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </nav>
       </div>
     </header>
