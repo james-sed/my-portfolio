@@ -119,6 +119,18 @@ function recordSubmission(key, recent, now) {
   }
 }
 
+/**
+ * Give a reserved slot back when nothing was delivered, so a provider outage
+ * does not lock a real visitor out for the rest of the window.
+ */
+function releaseSubmission(key, time) {
+  const times = submissions.get(key);
+  if (!times) return;
+  const index = times.lastIndexOf(time);
+  if (index !== -1) times.splice(index, 1);
+  submissions.set(key, times);
+}
+
 function escapeHtml(value) {
   return value
     .replace(/&/g, "&amp;")
@@ -202,7 +214,8 @@ export default async function handler(req, res) {
     return sendJson(res, 400, { error: "Message is too long." });
   }
 
-  // The message is valid and about to be sent, so it counts against the budget.
+  // Reserve the slot before talking to the provider so parallel submissions
+  // cannot exceed the budget. It is released again below if nothing was sent.
   recordSubmission(ip, limit.recent, limit.now);
 
   const safeName = singleLine(name);
@@ -229,11 +242,14 @@ export default async function handler(req, res) {
       }),
     });
   } catch (error) {
+    releaseSubmission(ip, limit.now);
     console.error("Resend request failed:", error);
     return sendJson(res, 502, { error: "Could not reach the email service." });
   }
 
   if (!response.ok) {
+    // Nothing was delivered, so the visitor keeps this attempt.
+    releaseSubmission(ip, limit.now);
     // Log the provider's reason, but don't leak it to the browser.
     console.error("Resend responded:", response.status, await response.text());
     return sendJson(res, 502, { error: "Could not send the message." });

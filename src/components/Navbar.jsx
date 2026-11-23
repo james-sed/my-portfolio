@@ -154,6 +154,8 @@ export default function Navbar() {
     if (!open) return undefined;
     const panel = navRef.current;
     if (!panel) return undefined;
+    // Captured for the cleanup below; the ref itself may have changed by then.
+    const toggle = toggleRef.current;
 
     const focusables = () =>
       [...panel.querySelectorAll("a, button")].filter(
@@ -189,6 +191,9 @@ export default function Navbar() {
       document.removeEventListener("keydown", onKey);
       main?.removeAttribute("inert");
       footer?.removeAttribute("inert");
+      // The panel is hidden again, so put focus back on the control that
+      // opened it. preventScroll keeps a section link's jump intact.
+      toggle?.focus({ preventScroll: true });
     };
   }, [open]);
 
@@ -302,7 +307,7 @@ export default function Navbar() {
                 className={[active === id ? "is-active" : "", "nav-enter"]
                   .filter(Boolean)
                   .join(" ")}
-                aria-current={active === id ? "page" : undefined}
+                aria-current={active === id ? "location" : undefined}
                 onClick={close}
                 style={{ "--enter-d": `${0.1 + i * 0.05}s` }}
               >
@@ -328,7 +333,9 @@ export default function Navbar() {
               type="button"
               onClick={toggleTheme}
               style={{ "--enter-d": "0.35s" }}
-              aria-label="Toggle theme"
+              aria-label={
+                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+              }
             >
               {theme === "dark" ? (
                 <HiSun size={20} aria-hidden="true" />

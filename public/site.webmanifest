@@ -1,6 +1,7 @@
 {
   "name": "James Sederia — Front-end Developer",
   "short_name": "James Sederia",
+  "id": "/",
   "description": "Portfolio of James Sederia, front-end developer at AWS SBG JRU.",
   "start_url": "./",
   "scope": "./",

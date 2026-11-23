@@ -300,6 +300,7 @@ export default function Contact() {
                     onChange={handleChange}
                     placeholder="you@example.com"
                     autoComplete="email"
+                    inputMode="email"
                     maxLength={MAX_LENGTH.email}
                     aria-invalid={errors.email ? "true" : undefined}
                     aria-describedby={errors.email ? "contact-email-error" : undefined}
