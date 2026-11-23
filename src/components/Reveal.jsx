@@ -21,26 +21,45 @@ export default function Reveal({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) return undefined;
 
-    // Respect reduced-motion: show immediately, no observer needed.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let observer = null;
+    let revealed = false;
+
+    const reveal = () => {
+      revealed = true;
       setVisible(true);
-      return;
-    }
+      observer?.disconnect();
+      observer = null;
+    };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
-    );
+    const observe = () => {
+      if (revealed || media.matches) return;
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) reveal();
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+      );
+      observer.observe(el);
+    };
 
-    observer.observe(el);
-    return () => observer.disconnect();
+    // Honour the preference at mount and keep following it: switching reduced
+    // motion on with the page open reveals anything still waiting.
+    const onChange = () => {
+      if (media.matches) reveal();
+      else observe();
+    };
+
+    if (media.matches) reveal();
+    else observe();
+
+    media.addEventListener("change", onChange);
+    return () => {
+      media.removeEventListener("change", onChange);
+      observer?.disconnect();
+    };
   }, []);
 
   return (

@@ -189,6 +189,18 @@ export default function Contact() {
     }
   };
 
+  const handleSendAnother = () => {
+    // Keep the visitor's details; clear only what they would rewrite.
+    setForm((f) => ({ ...f, message: "", hp_website: "" }));
+    setErrors(EMPTY_ERRORS);
+    setSubmitError(null);
+    setStatus("idle");
+    // The form is mounted again on the next frame.
+    requestAnimationFrame(() =>
+      document.getElementById("contact-message")?.focus(),
+    );
+  };
+
   return (
     <section
       className="section"
@@ -244,10 +256,19 @@ export default function Contact() {
           {/* ---- Form ---- */}
           <Reveal delay={120}>
             {status === "sent" ? (
-              <p className="form-status">
-                <HiOutlineCheckCircle size={22} aria-hidden="true" />
-                Thanks, {form.name || "friend"}! Your message is on its way.
-              </p>
+              <div className="form-success">
+                <p className="form-status">
+                  <HiOutlineCheckCircle size={22} aria-hidden="true" />
+                  Thanks, {form.name || "friend"}! Your message is on its way.
+                </p>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={handleSendAnother}
+                >
+                  Send another message
+                </button>
+              </div>
             ) : (
               <form className="contact-form" onSubmit={handleSubmit} noValidate>
                 {/* Honeypot: off-screen and skipped by keyboard and screen

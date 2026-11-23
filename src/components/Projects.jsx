@@ -207,14 +207,16 @@ export default function Projects() {
                             demo
                           </a>
                         )}
-                        <a
-                          href={project.repo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          tabIndex={isActive ? 0 : -1}
-                        >
-                          <FaGithub aria-hidden="true" /> Code
-                        </a>
+                        {project.repo && (
+                          <a
+                            href={project.repo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            tabIndex={isActive ? 0 : -1}
+                          >
+                            <FaGithub aria-hidden="true" /> Code
+                          </a>
+                        )}
                       </div>
                     </div>
                   </article>

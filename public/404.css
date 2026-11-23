@@ -1,0 +1,128 @@
+/* Standalone styles for the static 404 page: no build step, no external fonts. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f5faf7;
+  --text: #0f2019;
+  --heading: #07130d;
+  --muted: #48655a;
+  --primary: #0b6b4f;
+  --primary-hover: #095c44;
+  --primary-contrast: #ffffff;
+  --accent: #0a6b4d;
+  --ring: rgba(11, 107, 79, 0.45);
+  --gradient: linear-gradient(120deg, #047857 0%, #0d9488 55%, #0e7490 100%);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #070d0b;
+    --text: #d7e6df;
+    --heading: #f1f8f5;
+    --muted: #93a9a0;
+    --primary: #34d399;
+    --primary-hover: #6ee7b7;
+    --primary-contrast: #04170f;
+    --accent: #6ee7b7;
+    --ring: rgba(52, 211, 153, 0.5);
+    --gradient: linear-gradient(120deg, #6ee7b7 0%, #5eead4 55%, #67e8f9 100%);
+    color-scheme: dark;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 6vw, 4rem);
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+.page {
+  width: 100%;
+  max-width: 36rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  color: var(--heading);
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  margin: 0 0 1.75rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.hint {
+  margin: 1.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hint a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+}

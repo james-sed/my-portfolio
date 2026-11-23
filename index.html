@@ -55,29 +55,7 @@
     rel="stylesheet" />
 
   <!-- ── Apply the saved theme before paint to avoid a flash ─────── -->
-  <script>
-    (function () {
-      try {
-        var stored = localStorage.getItem("theme");
-        var theme =
-          stored === "light" || stored === "dark"
-            ? stored
-            : window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-        if (theme === "dark") {
-          document.documentElement.classList.add("dark");
-        }
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) {
-          meta.setAttribute(
-            "content",
-            theme === "dark" ? "#070d0b" : "#f5faf7",
-          );
-        }
-      } catch (e) { }
-    })();
-  </script>
+  <script src="/theme-init.js"></script>
 </head>
 
 <body>

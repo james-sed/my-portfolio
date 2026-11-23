@@ -220,7 +220,13 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    overflow: hidden;
+    /* A short viewport (landscape phone) must be able to scroll the card
+       instead of clipping the last links. */
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
@@ -1310,6 +1316,12 @@
   color: var(--danger);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.form-success {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
 }
 
 .contact-form .btn:disabled {

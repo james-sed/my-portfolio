@@ -1,7 +1,8 @@
 import { GITHUB_URL } from "../site.config";
 
 // `live: GITHUB_URL` means the project has no live demo yet; the card hides
-// the "Live demo" button in that case. Covers live in public/ as WebP files.
+// the "Live demo" button in that case. `repo: null` hides the "Code" button,
+// for a repository that is not public. Covers live in public/ as WebP files.
 export const PROJECTS = [
   {
     title: "AWS SBG JRU Website",
@@ -19,7 +20,8 @@ export const PROJECTS = [
     image: `${import.meta.env.BASE_URL}event-aws.webp`,
     tags: ["Vanilla HTML", "CSS", "JavaScript", "Python", "FastAPI", "Supabase", "Groq API"],
     live: GITHUB_URL,
-    repo: "https://github.com/AWS-Student-Builder-Group-JRU/AWS---Event-Website",
+    // Private repository, so the card shows no Code button.
+    repo: null,
   },
   {
     title: "Philippine Wage Dashboard",
