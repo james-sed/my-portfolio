@@ -109,44 +109,58 @@ export default function Certifications() {
 
               return (
                 <Reveal
-                  as="article"
+                  as="a"
                   key={id}
+                  href={url}
                   className="cert-card"
-                  delay={(i % 3) * 100}
+                  delay={(i % 3) * 70}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  aria-label={`View credential for ${title}`}
                 >
-                  <div className="cert-card__header">
-                    <div className="cert-card__icon" aria-hidden="true">
-                      <IconComponent />
+                  <div className="cert-card__icon" aria-hidden="true">
+                    <IconComponent />
+                  </div>
+
+                  <div className="cert-card__body">
+                    <div className="cert-card__header cert-card__header--desktop">
+                      <span className="cert-card__year">{year}</span>
                     </div>
-                    <span className="cert-card__year">{year}</span>
-                  </div>
 
-                  <div className="cert-card__content">
-                    <h3 className="cert-card__title">{title}</h3>
-                    <span className="cert-card__issuer">{issuer}</span>
-                  </div>
-
-                  <div className="cert-card__divider" aria-hidden="true" />
-
-                  <div className="cert-card__footer">
-                    {credentialId ? (
-                      <span
-                        className="cert-card__id"
-                        title={`Credential ID: ${credentialId}`}
-                      >
-                        ID: {credentialId}
+                    <div className="cert-card__content">
+                      <h3 className="cert-card__title">{title}</h3>
+                      <span className="cert-card__issuer cert-card__issuer--desktop">
+                        {issuer}
                       </span>
-                    ) : null}
-                    <a
-                      href={url}
-                      className="cert-card__link"
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      aria-label={`View credential for ${title}`}
-                    >
-                      <span>View credential</span>
-                      <ExternalArrowIcon />
-                    </a>
+                      <span className="cert-card__meta--mobile">
+                        {issuer} · {year}
+                      </span>
+                      {credentialId ? (
+                        <span
+                          className="cert-card__id cert-card__id--mobile"
+                          title={`Credential ID: ${credentialId}`}
+                        >
+                          ID: {credentialId}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="cert-card__divider" aria-hidden="true" />
+
+                    <div className="cert-card__footer">
+                      {credentialId ? (
+                        <span
+                          className="cert-card__id cert-card__id--desktop"
+                          title={`Credential ID: ${credentialId}`}
+                        >
+                          ID: {credentialId}
+                        </span>
+                      ) : null}
+                      <span className="cert-card__link">
+                        <span>View credential</span>
+                        <ExternalArrowIcon />
+                      </span>
+                    </div>
                   </div>
                 </Reveal>
               );
