@@ -126,7 +126,7 @@ export default function Certifications() {
             Credentials
           </h2>
           <p className="section__lead">
-            {CERTIFICATIONS.length} certificates from my college years in Jose Rizal University. Filter by issuer.
+            {CERTIFICATIONS.length} certificates earned from my college years & organization in Jose Rizal University. You can filter by the issuer.
           </p>
         </Reveal>
 
