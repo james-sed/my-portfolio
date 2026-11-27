@@ -1,5 +1,6 @@
+import { useState } from "react";
 import Reveal from "./Reveal";
-import { CERTIFICATIONS } from "../data/certifications";
+import { CERTIFICATIONS, CERT_KEYS } from "../data/certifications";
 
 function AwardIcon() {
   return (
@@ -84,6 +85,35 @@ const ICON_MAP = {
 };
 
 export default function Certifications() {
+  const [filter, setFilter] = useState("all");
+  const [expanded, setExpanded] = useState(false);
+
+  const filtered =
+    filter === "all"
+      ? CERTIFICATIONS
+      : CERTIFICATIONS.filter((c) => c.issuerKey === filter);
+
+  const canToggle = filtered.length > 5;
+  const mobileShown = canToggle && !expanded ? filtered.slice(0, 5) : filtered;
+
+  const handleFilterClick = (key) => {
+    setFilter(key);
+    setExpanded(false);
+  };
+
+  const chips = CERT_KEYS.map((k) => {
+    const count =
+      k === "all"
+        ? CERTIFICATIONS.length
+        : CERTIFICATIONS.filter((c) => c.issuerKey === k).length;
+    const active = k === filter;
+    return {
+      key: k,
+      label: `${k === "all" ? "All" : k} ${count}`,
+      active,
+    };
+  });
+
   return (
     <section
       className="section certifications-section"
@@ -93,15 +123,86 @@ export default function Certifications() {
       <div className="container">
         <Reveal className="section__head">
           <h2 className="section__title" id="certifications-title">
-            Credentials
+            Credentials and training
           </h2>
           <p className="section__lead">
-            Courses and certificates that I have completed and received throughout my college years in Jose Rizal University.
+            {CERTIFICATIONS.length} certificates from my college years in Jose Rizal University. Filter by issuer.
           </p>
         </Reveal>
 
+        {/* Filter chips (Certifications filter row) */}
+        <div
+          className="cert-chips"
+          role="tablist"
+          aria-label="Filter certificates by issuer"
+        >
+          {chips.map(({ key, label, active }) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              className={`cert-chip${active ? " is-active" : ""}`}
+              onClick={() => handleFilterClick(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Mobile Compact Grouped List (<= 640px) */}
+        <div className="cert-mobile-list">
+          {mobileShown.map(({ id, title, issuer, url }) => {
+            const isExternal =
+              url && (url.startsWith("http://") || url.startsWith("https://"));
+
+            return (
+              <a
+                key={id}
+                href={url}
+                className="cert-mobile-row"
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                aria-label={`View credential for ${title}`}
+              >
+                <div className="cert-mobile-row__info">
+                  <span className="cert-mobile-row__title">{title}</span>
+                  <span className="cert-mobile-row__issuer">{issuer}</span>
+                </div>
+                <svg
+                  className="cert-mobile-row__arrow"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M8 7h9v9" />
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Mobile Show all / Show less button */}
+        {canToggle && (
+          <button
+            type="button"
+            className="cert-toggle-btn"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-expanded={expanded}
+          >
+            {expanded ? "Show less" : `Show all ${filtered.length}`}
+          </button>
+        )}
+
+        {/* Desktop 3-column / 2-column Grid (> 640px) */}
         <div className="certifications-grid">
-          {CERTIFICATIONS.map(
+          {filtered.map(
             ({ id, title, issuer, year, credentialId, url, icon }, i) => {
               const IconComponent = ICON_MAP[icon] || AwardIcon;
               const isExternal =
@@ -132,17 +233,6 @@ export default function Certifications() {
                       <span className="cert-card__issuer cert-card__issuer--desktop">
                         {issuer}
                       </span>
-                      <span className="cert-card__meta--mobile">
-                        {issuer} · {year}
-                      </span>
-                      {credentialId ? (
-                        <span
-                          className="cert-card__id cert-card__id--mobile"
-                          title={`Credential ID: ${credentialId}`}
-                        >
-                          ID: {credentialId}
-                        </span>
-                      ) : null}
                     </div>
 
                     <div className="cert-card__divider" aria-hidden="true" />
