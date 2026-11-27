@@ -76,7 +76,7 @@ export default function Skills() {
       aria-labelledby="skills-title"
     >
       <div className="container">
-        <Reveal className="section__head">
+        <Reveal className="section__head section__head--center">
           <p className="eyebrow">Toolbox</p>
           <h2 className="section__title" id="skills-title">
             What I build with
