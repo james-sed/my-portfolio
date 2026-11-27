@@ -123,7 +123,7 @@ export default function Certifications() {
       <div className="container">
         <Reveal className="section__head">
           <h2 className="section__title" id="certifications-title">
-            Credentials and training
+            Credentials
           </h2>
           <p className="section__lead">
             {CERTIFICATIONS.length} certificates from my college years in Jose Rizal University. Filter by issuer.
