@@ -135,8 +135,11 @@
   }
 }
 
-.navbar__cta {
-  margin-left: 0.5rem;
+/* Shown only inside the mobile menu, where the theme toggle sits alone in the
+   actions row. On desktop the row is `display: contents`, so this must stay
+   hidden or it would appear as stray text in the nav. */
+.navbar__actions-label {
+  display: none;
 }
 
 .theme-toggle {
@@ -219,6 +222,9 @@
     box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    /* The desktop row sets align-items: center; in a column that collapses the
+       full-width divider to 0px, so reset it here. */
+    align-items: stretch;
     gap: 0;
     /* A short viewport (landscape phone) must be able to scroll the card
        instead of clipping the last links. */
@@ -336,46 +342,24 @@
     background: var(--mobile-menu-divider, #1f3029);
   }
 
-  /* Actions row */
+  /* Actions row: settings label on the left, theme toggle on the right */
   .navbar__actions {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 8px;
     width: 100%;
     padding: 0 4px;
   }
 
-  .navbar__cta {
-    flex: 1;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    padding: 0 16px;
-    border-radius: var(--radius-pill, 999px);
-    background: var(--brand-400, #34d399);
-    color: var(--primary-contrast, #06140e);
+  .navbar__actions-label {
+    display: inline;
+    padding-left: 10px;
     font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    box-shadow: none;
-    transition:
-      transform 0.2s var(--ease),
-      filter 0.2s var(--ease);
-  }
-
-  .navbar__cta:hover {
-    filter: brightness(1.06);
-    transform: translateY(-1px);
-  }
-
-  .navbar__cta:focus-visible {
-    outline: 2px solid var(--accent-text, #34d399);
-    outline-offset: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--text-muted, #a9bab2);
   }
 
   .theme-toggle {

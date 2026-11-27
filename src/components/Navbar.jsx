@@ -321,6 +321,7 @@ export default function Navbar() {
           <div className="navbar__divider" role="separator" aria-hidden="true" />
 
           <div className="navbar__actions">
+            <span className="navbar__actions-label">Theme</span>
             <button
               className="theme-toggle nav-enter"
               type="button"
