@@ -74,12 +74,7 @@ export default function About() {
             My journey into web development started with AWS. After joining the
             Student Builders group, I grew into front-end development and helped
             ship our group's website which is now published and running. I still
-            remember how proud the team was on launch day.
-          </p>
-          <p>
-            Today I focus on building interfaces that are fast, readable, and
-            enjoyable to use. Clean HTML, CSS, and React that
-            scales.
+            remember how proud the tech team was on launch day of the website.
           </p>
 
           <ul className="about-facts">
