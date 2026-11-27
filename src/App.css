@@ -1003,6 +1003,19 @@
   }
 }
 
+/* The reveal animation lives on this wrapper, not on .cert-card. Putting the
+   Reveal classes on the card itself let the card's own `transition` shorthand
+   (below, later in the cascade) reset transition-delay and drop opacity, which
+   killed the fade and the stagger. Keep them separate. */
+.cert-card-wrap {
+  display: flex;
+  min-width: 0;
+}
+
+.cert-card-wrap > .cert-card {
+  flex: 1 1 auto;
+}
+
 .cert-card {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1031,8 +1044,14 @@
   border-color: #1f3029;
 }
 
+/* Credentials with no public verification URL: same layout, no link affordance
+   and no hover lift, so it never reads as clickable. */
+.cert-card--static {
+  cursor: default;
+}
+
 @media (hover: hover) {
-  .cert-card:hover {
+  .cert-card:not(.cert-card--static):hover {
     transform: translateY(-4px);
     border-color: var(--border-strong);
     box-shadow:
@@ -1040,7 +1059,7 @@
       var(--card-shadow);
   }
 
-  .dark .cert-card:hover {
+  .dark .cert-card:not(.cert-card--static):hover {
     border-color: rgba(52, 211, 153, 0.35);
     box-shadow:
       0 20px 40px -15px rgba(0, 0, 0, 0.7),
@@ -1053,7 +1072,7 @@
   }
 }
 
-.cert-card:active {
+.cert-card:not(.cert-card--static):active {
   transform: scale(0.99);
 }
 
@@ -1238,6 +1257,11 @@
     border-top-color: #1f3029;
   }
 
+  /* No public verification URL: keep the row readable but not tappable. */
+  .cert-mobile-row--static {
+    cursor: default;
+  }
+
   .cert-mobile-row:first-child {
     border-top: none;
   }
@@ -1262,6 +1286,12 @@
     font-size: 13px;
     color: var(--text-muted);
     overflow-wrap: break-word;
+  }
+
+  .cert-mobile-row__id {
+    font-size: 12px;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
   }
 
   .cert-mobile-row__arrow {

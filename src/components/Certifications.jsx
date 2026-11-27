@@ -21,25 +21,6 @@ function AwardIcon() {
   );
 }
 
-function ShieldCheckIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z" />
-      <path d="M8.5 12l2.5 2.5 4.5-5" />
-    </svg>
-  );
-}
-
 function GraduationCapIcon() {
   return (
     <svg
@@ -80,9 +61,11 @@ function ExternalArrowIcon() {
 
 const ICON_MAP = {
   award: AwardIcon,
-  shield: ShieldCheckIcon,
   cap: GraduationCapIcon,
 };
+
+const isExternalUrl = (url) =>
+  Boolean(url && (url.startsWith("http://") || url.startsWith("https://")));
 
 export default function Certifications() {
   const [filter, setFilter] = useState("all");
@@ -123,25 +106,26 @@ export default function Certifications() {
       <div className="container">
         <Reveal className="section__head">
           <h2 className="section__title" id="certifications-title">
-            Credentials
+            Certifications
           </h2>
           <p className="section__lead">
-            {CERTIFICATIONS.length} certificates earned from my college years & organization in Jose Rizal University. You can filter by the issuer.
+            {CERTIFICATIONS.length} credentials earned during my college years
+            and through my organization at Jose Rizal University. You can filter
+            by the issuer.
           </p>
         </Reveal>
 
         {/* Filter chips (Certifications filter row) */}
         <div
           className="cert-chips"
-          role="tablist"
-          aria-label="Filter certificates by issuer"
+          role="group"
+          aria-label="Filter credentials by issuer"
         >
           {chips.map(({ key, label, active }) => (
             <button
               key={key}
               type="button"
-              role="tab"
-              aria-selected={active}
+              aria-pressed={active}
               className={`cert-chip${active ? " is-active" : ""}`}
               onClick={() => handleFilterClick(key)}
             >
@@ -152,9 +136,27 @@ export default function Certifications() {
 
         {/* Mobile Compact Grouped List (<= 640px) */}
         <div className="cert-mobile-list">
-          {mobileShown.map(({ id, title, issuer, url }) => {
-            const isExternal =
-              url && (url.startsWith("http://") || url.startsWith("https://"));
+          {mobileShown.map(({ id, title, issuer, credentialId, url }) => {
+            const info = (
+              <div className="cert-mobile-row__info">
+                <span className="cert-mobile-row__title">{title}</span>
+                <span className="cert-mobile-row__issuer">{issuer}</span>
+                {/* No public URL: show the ID so the row still carries proof. */}
+                {!url && credentialId ? (
+                  <span className="cert-mobile-row__id">ID: {credentialId}</span>
+                ) : null}
+              </div>
+            );
+
+            if (!url) {
+              return (
+                <div key={id} className="cert-mobile-row cert-mobile-row--static">
+                  {info}
+                </div>
+              );
+            }
+
+            const isExternal = isExternalUrl(url);
 
             return (
               <a
@@ -163,12 +165,9 @@ export default function Certifications() {
                 className="cert-mobile-row"
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
-                aria-label={`View credential for ${title}`}
+                aria-label={`View credential: ${title} (${issuer})`}
               >
-                <div className="cert-mobile-row__info">
-                  <span className="cert-mobile-row__title">{title}</span>
-                  <span className="cert-mobile-row__issuer">{issuer}</span>
-                </div>
+                {info}
                 <svg
                   className="cert-mobile-row__arrow"
                   width="18"
@@ -205,53 +204,72 @@ export default function Certifications() {
           {filtered.map(
             ({ id, title, issuer, year, credentialId, url, icon }, i) => {
               const IconComponent = ICON_MAP[icon] || AwardIcon;
-              const isExternal =
-                url && (url.startsWith("http://") || url.startsWith("https://"));
+              const isExternal = isExternalUrl(url);
 
-              return (
-                <Reveal
-                  as="a"
-                  key={id}
-                  href={url}
-                  className="cert-card"
-                  delay={(i % 3) * 70}
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noopener noreferrer" : undefined}
-                  aria-label={`View credential for ${title}`}
-                >
+              const content = (
+                <>
                   <div className="cert-card__icon" aria-hidden="true">
                     <IconComponent />
                   </div>
 
                   <div className="cert-card__body">
-                    <div className="cert-card__header cert-card__header--desktop">
+                    <div className="cert-card__header">
                       <span className="cert-card__year">{year}</span>
                     </div>
 
                     <div className="cert-card__content">
                       <h3 className="cert-card__title">{title}</h3>
-                      <span className="cert-card__issuer cert-card__issuer--desktop">
-                        {issuer}
-                      </span>
+                      <span className="cert-card__issuer">{issuer}</span>
                     </div>
 
-                    <div className="cert-card__divider" aria-hidden="true" />
+                    {(credentialId || url) && (
+                      <>
+                        <div
+                          className="cert-card__divider"
+                          aria-hidden="true"
+                        />
 
-                    <div className="cert-card__footer">
-                      {credentialId ? (
-                        <span
-                          className="cert-card__id cert-card__id--desktop"
-                          title={`Credential ID: ${credentialId}`}
-                        >
-                          ID: {credentialId}
-                        </span>
-                      ) : null}
-                      <span className="cert-card__link">
-                        <span>View credential</span>
-                        <ExternalArrowIcon />
-                      </span>
-                    </div>
+                        <div className="cert-card__footer">
+                          {credentialId ? (
+                            <span
+                              className="cert-card__id"
+                              title={`Credential ID: ${credentialId}`}
+                            >
+                              ID: {credentialId}
+                            </span>
+                          ) : null}
+                          {url ? (
+                            <span className="cert-card__link">
+                              <span>
+                                {isExternal ? "View credential" : "View details"}
+                              </span>
+                              <ExternalArrowIcon />
+                            </span>
+                          ) : null}
+                        </div>
+                      </>
+                    )}
                   </div>
+                </>
+              );
+
+              return (
+                <Reveal key={id} className="cert-card-wrap" delay={(i % 3) * 70}>
+                  {url ? (
+                    <a
+                      className="cert-card"
+                      href={url}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                      aria-label={`View credential: ${title} (${issuer})`}
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <article className="cert-card cert-card--static">
+                      {content}
+                    </article>
+                  )}
                 </Reveal>
               );
             },

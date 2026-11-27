@@ -1,14 +1,7 @@
 // Credentials and training certifications data.
 // Update or add certifications here — the Certifications component reads from this file.
-
-export const CERT_KEYS = [
-  "all",
-  "Anthropic",
-  "Huawei",
-  "Cisco",
-  "DataCamp",
-  "Certiport",
-];
+// `url` is optional: omit it when the issuer offers no public verification page
+// and the card renders as a non-clickable entry showing only the credential ID.
 
 export const CERTIFICATIONS = [
   {
@@ -54,7 +47,6 @@ export const CERTIFICATIONS = [
     issuerKey: "Huawei",
     year: "2026",
     credentialId: "ICT20260905000003",
-    url: "#cert-6",
     icon: "cap",
   },
   {
@@ -64,7 +56,6 @@ export const CERTIFICATIONS = [
     issuerKey: "Huawei",
     year: "2026",
     credentialId: "EBG2026101746686",
-    url: "#cert-7",
     icon: "cap",
   },
   {
@@ -74,7 +65,6 @@ export const CERTIFICATIONS = [
     issuerKey: "Huawei",
     year: "2026",
     credentialId: "ICT20261027000012",
-    url: "#cert-7",
     icon: "cap",
   },
   {
@@ -104,7 +94,7 @@ export const CERTIFICATIONS = [
     issuerKey: "DataCamp",
     year: "2026",
     credentialId: "c8558d76fb1f252b5fd859dcf685dc7d913f38ff",
-    url: "#credential-3",
+    url: "https://www.datacamp.com/statement-of-accomplishment/course/c8558d76fb1f252b5fd859dcf685dc7d913f38ff",
     icon: "cap",
   },
   {
@@ -114,7 +104,7 @@ export const CERTIFICATIONS = [
     issuerKey: "DataCamp",
     year: "2026",
     credentialId: "cc15226867fc958b438adb68678494dfb2ad65f4",
-    url: "#credential-4",
+    url: "https://www.datacamp.com/statement-of-accomplishment/course/cc15226867fc958b438adb68678494dfb2ad65f4",
     icon: "cap",
   },
   {
@@ -137,4 +127,11 @@ export const CERTIFICATIONS = [
     url: "https://www.credly.com/badges/042a8314-db5d-4c33-9f58-e3019844d3f9/public_url",
     icon: "award",
   },
+];
+
+// Filter chips: "all" plus every issuer key, in the order they appear above.
+// A new issuerKey automatically gets a chip — no second list to maintain.
+export const CERT_KEYS = [
+  "all",
+  ...new Set(CERTIFICATIONS.map((cert) => cert.issuerKey)),
 ];
