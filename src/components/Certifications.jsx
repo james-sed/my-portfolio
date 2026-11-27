@@ -96,7 +96,7 @@ export default function Certifications() {
             Credentials
           </h2>
           <p className="section__lead">
-            Courses and certificates that I have completed and recevied throughout my college years in Jose Rizal University.
+            Courses and certificates that I have completed and received throughout my college years in Jose Rizal University.
           </p>
         </Reveal>
 
@@ -129,9 +129,14 @@ export default function Certifications() {
                   <div className="cert-card__divider" aria-hidden="true" />
 
                   <div className="cert-card__footer">
-                    <span className="cert-card__id">
-                      {credentialId ? `ID: ${credentialId}` : ""}
-                    </span>
+                    {credentialId ? (
+                      <span
+                        className="cert-card__id"
+                        title={`Credential ID: ${credentialId}`}
+                      >
+                        ID: {credentialId}
+                      </span>
+                    ) : null}
                     <a
                       href={url}
                       className="cert-card__link"
