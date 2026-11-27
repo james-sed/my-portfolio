@@ -96,7 +96,7 @@ export default function Certifications() {
             Credentials
           </h2>
           <p className="section__lead">
-            Courses and certificates that I have completed and recevied throughout the past years.
+            Courses and certificates that I have completed and recevied throughout my college years in Jose Rizal University.
           </p>
         </Reveal>
 
