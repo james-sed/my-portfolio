@@ -106,7 +106,7 @@ export default function Certifications() {
       <div className="container">
         <Reveal className="section__head">
           <h2 className="section__title" id="certifications-title">
-            Certifications
+            Credentials
           </h2>
           <p className="section__lead">
             {CERTIFICATIONS.length} credentials earned during my college years
