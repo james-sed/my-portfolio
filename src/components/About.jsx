@@ -12,7 +12,7 @@ const FACTS = [
     Icon: HiOutlineBriefcase,
     text: (
       <>
-        <strong>Front-end Developer</strong> at AWS SBG JRU
+        <strong>Web Developer</strong> at AWS SBG JRU
       </>
     ),
   },
