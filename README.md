@@ -20,6 +20,7 @@ This is my personal portfolio website: a fast, single-page introduction to who I
 - **Dark / light mode** — toggle in the navbar; initial theme follows your system preference and is remembered
 - **Hero role animation** — cycles through my roles on load
 - **Skills section** — a grid of the languages, tools, and platforms I work with
+- **Certifications section** — credentials and statements of accomplishment, filterable by issuer, with verification links where the issuer provides one
 - **Projects carousel** — an interactive 3D coverflow with tech tags, demo/code links, arrow and dot controls, keyboard navigation, and swipe support
 - **Scroll-reveal animations** — sections fade in as you scroll and follow `prefers-reduced-motion`, including changes made while the page is open
 - **Contact section** — direct email, GitHub, and LinkedIn links plus a required-field form that emails me through [Resend](https://resend.com). The endpoint refuses cross-site posts, silently drops honeypot submissions, and rate limits per IP. After a successful send, a button starts another message with your details kept.
@@ -90,9 +91,10 @@ The dev server starts at `http://localhost:5173` with hot module replacement.
 │   ├── 404.html, 404.css # Standalone branded not-found page
 │   └── robots.txt, sitemap.xml
 ├── src/
-│   ├── components/       # Navbar, Hero, About, Skills, Projects, Contact, Footer, Reveal
+│   ├── components/       # Navbar, Hero, About, Skills, Certifications, Projects, Contact, Footer, Reveal
 │   ├── contexts/         # ThemeProvider + theme-context (state, hook, OS-follow)
-│   ├── data/projects.js  # Project titles, descriptions, images, tags, and links
+│   ├── data/projects.js        # Project titles, descriptions, images, tags, and links
+│   ├── data/certifications.js  # Credential titles, issuers, years, IDs, and links
 │   ├── pages/Home.jsx    # Composes all sections into one page
 │   ├── App.css           # Component styles
 │   ├── App.jsx           # Routes: "/" renders Home; other paths redirect client-side
@@ -111,6 +113,7 @@ The dev server starts at `http://localhost:5173` with hot module replacement.
 
 - **Personal details:** update `src/site.config.js` — name, email, GitHub/LinkedIn URLs, roles, and the résumé path.
 - **Projects:** update `src/data/projects.js` — title, description, image, tags, live demo, and repository URL. A `live` value equal to `GITHUB_URL` hides the "Live demo" button; `repo: null` hides the "Code" button when a repository is not public.
+- **Certifications:** update `src/data/certifications.js`. `url` is optional — omit it when the issuer has no public verification page and the card renders as a non-clickable entry showing the credential ID. Filter chips are derived from `issuerKey`, so a new issuer gets a chip automatically.
 - **Contact rules:** `shared/contact-limits.js` holds the field limits and email pattern; both the form and `api/contact.js` import it, so edit it once.
 - **Résumé:** replace `public/resume-sederia.pdf` (keep the filename or update `RESUME_URL` in `src/site.config.js`).
 - **Images:** project screenshots live in `public/` as WebP files. The social preview is `public/portfolio-preview.jpg`, cropped to the 1200×630 box declared in `index.html` — keep those two in sync if you replace it.
@@ -136,6 +139,7 @@ The site is set up for **Vercel**. There is deliberately no catch-all rewrite: t
 - Dark/light mode works and survives a refresh.
 - The projects carousel works with arrows, dots, keyboard arrows, and swipe.
 - Swiping the centered project card rotates once and does not open its links.
+- The credentials filter shows the right subset and count, and cards without a verification URL are not clickable.
 - Keyboard focus is visible on links, buttons, and the carousel.
 - The résumé link downloads the PDF.
 - The contact form rejects an invalid email address and delivers a real message.
@@ -146,6 +150,7 @@ The site is set up for **Vercel**. There is deliberately no catch-all rewrite: t
 - **Contact email is sent from `onboarding@resend.dev` until a sending domain is verified in Resend.** Add the DKIM TXT and the `send` / `rsend` CNAME records shown in the Resend dashboard, then set `CONTACT_FROM` to an address on that domain.
 - **Four projects have no live demo yet.** Their `live` value is `GITHUB_URL`, so the card hides the button. Replace it in `src/data/projects.js` once each one is deployed.
 - **One project's repository is private.** Event Registration System uses `repo: null`, so its card shows no Code button.
+- **Three Huawei ICT Academy credentials have no public verification URL.** Their cards are intentionally non-clickable and show only the credential ID; add a `url` in `src/data/certifications.js` if Huawei provides one later.
 
 ## Contact
 
