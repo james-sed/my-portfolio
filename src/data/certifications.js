@@ -99,4 +99,20 @@ export const CERTIFICATIONS = [
     url: "https://verify.skilljar.com/c/c48ir6os6fjc",
     icon: "cap",
   },
+  {
+    id: "cert-12",
+    title: "Claude Code in Action",
+    issuer: "Anthropic Academy",
+    year: "2026",
+    url: "https://verify.skilljar.com/c/tmddcesdpxiq",
+    icon: "cap",
+  },
+  {
+    id: "cert-13",
+    title: "Introduction to Model Context Protocol",
+    issuer: "Anthropic Academy",
+    year: "2026",
+    url: "https://verify.skilljar.com/c/zfampsayfy3c",
+    icon: "cap",
+  },
 ];
