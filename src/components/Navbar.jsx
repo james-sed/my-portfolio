@@ -321,20 +321,11 @@ export default function Navbar() {
           <div className="navbar__divider" role="separator" aria-hidden="true" />
 
           <div className="navbar__actions">
-            <a
-              className="btn btn--primary navbar__cta nav-enter"
-              href="#contact"
-              onClick={close}
-              style={{ "--enter-d": "0.3s" }}
-            >
-              Hire me
-            </a>
-
             <button
               className="theme-toggle nav-enter"
               type="button"
               onClick={toggleTheme}
-              style={{ "--enter-d": "0.35s" }}
+              style={{ "--enter-d": "0.3s" }}
               aria-label={
                 theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
               }

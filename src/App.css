@@ -340,8 +340,10 @@
   .navbar__actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 8px;
     width: 100%;
+    padding: 0 4px;
   }
 
   .navbar__cta {
