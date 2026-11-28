@@ -1974,6 +1974,11 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  /* Five footer links fit on one line from 360px up with the tighter gap. */
+  .footer__nav {
+    gap: 0.75rem;
+  }
 }
 
 

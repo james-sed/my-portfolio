@@ -5,7 +5,7 @@ import { useTheme } from "../contexts/theme-context";
 const LINKS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
-  { id: "certifications", label: "Certifications" },
+  { id: "certifications", label: "Credentials" },
   { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];

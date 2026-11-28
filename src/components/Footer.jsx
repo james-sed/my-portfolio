@@ -5,6 +5,7 @@ import { SOCIAL_LINKS } from "../site.config";
 const NAV = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
+  { id: "certifications", label: "Credentials" },
   { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
